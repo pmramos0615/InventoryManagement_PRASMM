@@ -1,0 +1,66 @@
+﻿@model InventoryManagement_PRASMM.Models.ProductSubCategory
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="page-header">
+        <div class="page-title">
+            <h4>Product sub Category</h4>
+            <h6>@ViewBag.Caption</h6>
+        </div>
+    </div>
+    <!-- /add -->
+    <div class="card">
+        @using (Html.BeginForm("Save", "ProductSubCategory"))
+        {
+            if (Model != null && Model.ID > 0)
+            {
+                @Html.HiddenFor(a => a.ID)
+            }
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Parent Category</label>
+                            @Html.DropDownListFor(a => a.CategoryID, new SelectList(ViewBag.Category, "ID", "Name"), "Select Parent Category", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Category Name</label>
+                            @Html.TextBoxFor(a => a.Name, new { @class = "form-control", @required = "true" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Category Code</label>
+                            @Html.TextBoxFor(a => a.Code, new { @class = "form-control", @required = "true" })
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Description</label>
+                            @Html.TextAreaFor(a => a.Description, new { @class = "form-control", @required = "true" })
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <button class="btn btn-submit me-2" type="submit">Save changes</button>
+                        @if (Model.ID > 0)
+                        {
+                            <a href="#" class="btn btn-danger" id="btnDelete">Delete</a>
+                            @Html.Hidden("RedirectTo", Url.Action("Index", "ProductSubCategory"))
+                            ;
+                        }
+                        <a href="@Url.Action("Index", "ProductSubCategory")" class="btn btn-cancel">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+    @section scripts{
+        <script src="~/js/pages/subcategory.js"></script>
+    }

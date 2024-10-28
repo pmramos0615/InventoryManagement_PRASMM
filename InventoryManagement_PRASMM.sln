@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManagement_PRASMM", "InventoryManagement_PRASMM\InventoryManagement_PRASMM.csproj", "{6B971C3C-EA72-45D6-BC1D-41DD53D9A37F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B971C3C-EA72-45D6-BC1D-41DD53D9A37F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B971C3C-EA72-45D6-BC1D-41DD53D9A37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B971C3C-EA72-45D6-BC1D-41DD53D9A37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B971C3C-EA72-45D6-BC1D-41DD53D9A37F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {744DD43D-1E1F-417E-B9AC-ABD8ABE089AA}
+	EndGlobalSection
+EndGlobal

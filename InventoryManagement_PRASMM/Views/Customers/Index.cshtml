@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="page-header">
+        <div class="page-title">
+            <h4>Customer list</h4>
+            <h6>Manage your customers</h6>
+        </div>
+        <div class="page-btn">
+            <a href="@Url.Action("Details", "Customers", new { id="0"})" class="btn btn-added">
+                <img src="img/icons/plus.svg" class="me-1" alt="img">Add  Customers
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["success"] != null)
+    {
+
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <!-- /product list -->
+    <div class="card">
+        <div class="card-body">
+            <!-- /Filter -->
+            <div class="table-responsive">
+                <table id="datatableList" class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Terms </th>
+                            <th>Contact No</th>
+                            <th>Contact Person</th>
+                            <th>Email Address</th>
+                            <th>Created By</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="~/js/pages/customers.js"></script>
+}

@@ -1,0 +1,88 @@
+﻿<!-- Sidebar -->
+<div class="sidebar new-header sidebar-one">
+    <div id="sidebar-menu" class="sidebar-menu">
+        <ul class="nav">
+            <li class="submenu">
+                <a href="index.html"><img src="~/img/icons/menu-icon.svg" alt="img"><span> Sales</span> <span class="menu-arrow"></span></a>
+                
+
+                <ul>
+                    <li><a href="@Url.Action("Index","Dashboard")"><img src="~/img/icons/dashboard.svg" alt="img"><span> Dashboard</span> </a></li>
+                    <li><a href="saleslist.html"><i data-feather="shopping-cart"></i><span>Sales</span></a></li>
+                    <li><a href="invoicereport.html"><i data-feather="file-text"></i><span>Invoices</span></a></li>
+                    <li><a href="salesreturnlists.html"><i data-feather="copy"></i><span>Sales Return</span></a></li>
+                    <li><a href="quotationList.html"><i data-feather="save"></i><span>Quotation</span></a></li>
+                    <li><a href="pos.html"><i data-feather="hard-drive"></i><span>POS</a></li>
+                    <li class="submenu">
+                        <a href="javascript:void(0);"><i data-feather="shuffle"></i><span>Transfer</span><span class="menu-arrow"></span></a>
+                        <ul>
+                            <li><a href="transferlist.html">Transfer List</a></li>
+                            <li><a href="importtransfer.html">Import Transfer </a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="javascript:void(0);"><i data-feather="corner-up-left"></i><span>Return</span><span class="menu-arrow"></span></a>
+                        <ul>
+                            <li><a href="salesreturnlist.html">Sales Return</a></li>
+                            <li><a href="purchasereturnlist.html">Purchase Return</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="javascript:void(0);"><i data-feather="shopping-bag"></i><span> Purchases</span> <span class="menu-arrow"></span></a>
+                <ul>
+                    <li><a href="purchaselist.html"><i data-feather="shopping-bag"></i><span>Purchases</span></a></li>
+                    <li><a href="importpurchase.html"><i data-feather="minimize-2"></i><span>Import Purchases</span></a></li>
+                    <li><a href="purchaseorderreport.html"><i data-feather="file-minus"></i><span>Purchase Order</span></a></li>
+                    <li><a href="purchasereturnlist.html"><i data-feather="refresh-cw"></i><span>Purchase Return</span></a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="javascript:void(0);"><i data-feather="box"></i> <span> Products </span> <span class="menu-arrow"></span></a>
+                <ul>
+                    <li><a href="@Url.Action("Index","Products")"><i data-feather="box"></i><span>Products</span></a></li>
+                    <li><a href="@Url.Action("Details", "Products", new { id="0"})"><i data-feather="plus-square"></i><span>Create Product</span></a></li>
+                    <li><a href="@Url.Action("Index","Category")"><i data-feather="codepen"></i><span>Category</span></a></li>
+                    <li><a href="@Url.Action("Index","Brand")"><i data-feather="tag"></i><span>Brands</span></a></li>
+                    <li><a href="@Url.Action("Index","ProductSubCategory")"><i data-feather="speaker"></i><span>Sub Category</span></a></li>
+                    <li><a href="barcode.html"><i data-feather="align-justify"></i><span>Print Barcode</span></a></li>
+                    <li><a href="importproduct.html"><i data-feather="minimize-2"></i><span>Import Products</span></a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="javascript:void(0);"><img src="~/img/icons/users1.svg" alt="img"><span> Peoples</span> <span class="menu-arrow"></span></a>
+                <ul>
+                    <li><a href="customerlist.html"><i data-feather="user"></i><span>Customers</span></a></li>
+                    <li><a href="supplierlist.html"><i data-feather="users"></i><span>Suppliers</span></a></li>
+                    <li><a href="userlist.html"><i data-feather="user-check"></i><span>Users</span></a></li>
+                    <li><a href="@Url.Action("Index","Stores")"><i data-feather="home"></i><span>Stores</span></a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="javascript:void(0);"><img src="~/img/icons/time.svg" alt="img"><span> Report</span> <span class="menu-arrow"></span></a>
+                <ul>
+                    <li><a href="purchaseorderreport.html">Purchase order report</a></li>
+                    <li><a href="inventoryreport.html">Inventory Report</a></li>
+                    <li><a href="salesreport.html">Sales Report</a></li>
+                    <li><a href="invoicereport.html">Invoice Report</a></li>
+                    <li><a href="purchasereport.html">Purchase Report</a></li>
+                    <li><a href="supplierreport.html">Supplier Report</a></li>
+                    <li><a href="customerreport.html">Customer Report</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="javascript:void(0);"><img src="~/img/icons/settings.svg" alt="img"><span> Settings</span> <span class="menu-arrow"></span></a>
+                <ul>
+                    <li><a href="generalsettings.html">General Settings</a></li>
+                    <li><a href="emailsettings.html">Email Settings</a></li>
+                    <li><a href="paymentsettings.html">Payment Settings</a></li>
+                    <li><a href="currencysettings.html">Currency Settings</a></li>
+                    <li><a href="grouppermissions.html">Group Permissions</a></li>
+                    <li><a href="taxrates.html">Tax Rates</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- /Sidebar -->
