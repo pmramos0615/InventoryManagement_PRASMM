@@ -24,7 +24,7 @@ namespace InventoryManagement_PRASMM.Data
             //connStr += "password=" + Decrypt(ConfigurationManager.AppSettings["pwd"], true) + ";";
             //connStr += " database=" + Decrypt(ConfigurationManager.AppSettings["db"], true) + ";";
 
-            string connStr = "Server=ISD-PMR;Database=PRASMM_IMS;Trusted_Connection=True;TrustServerCertificate=True;";
+            string connStr = "Server=sql5111.site4now.net;Database=db_aaeb12_inventory;User Id=db_aaeb12_inventory_admin;Password=Inv3nt0ryOnl1n3!;";
 
             ////connection pooling
             ///**/
