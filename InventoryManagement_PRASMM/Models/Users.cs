@@ -3,11 +3,11 @@ using System.Data;
 
 namespace InventoryManagement_PRASMM.Models
 {
-    public class Employees
+    public class Users
     {
 
         #region CONSTRUCTOR
-        public Employees()
+        public Users()
         {
             this.init();
         }
@@ -15,6 +15,7 @@ namespace InventoryManagement_PRASMM.Models
         public void init()
         {
             this.ID = 0;
+            this.SubscriptionID = 0;
             this.UserName = "";
             this.Password = "";
             this.FirstName = "";
@@ -34,13 +35,12 @@ namespace InventoryManagement_PRASMM.Models
             this.DateCreated = DateTime.Now;
             this.ModifiedBy = 0;
             this.DateModified = DateTime.Now;
-            this.FullName = string.Empty;
-            
 
         }
         #endregion
         #region Properties
         public int ID { get; set; }
+        public int SubscriptionID { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
@@ -60,52 +60,44 @@ namespace InventoryManagement_PRASMM.Models
         public DateTime DateCreated { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime DateModified { get; set; }
-        public string FullName { get; set; }
+
+        public string FullName {
+            get { return string.Format("{0} {1}", this.FirstName, this.LastName); }
+        }
 
         #endregion
 
         #region Public Methods
-        public static Employees GetById(int id)
+        public static Users GetById(int id)
         {
-            var dal = new EmployeesDAL();
-            var instance = new Employees();
+            var dal = new UsersDAL();
+            var instance = new Users();
             instance.Bind(dal.GetById(id));
             return instance;
         }
-        public static List<Employees> GetAll()
+        public static List<Users> GetAll()
         {
-            var dal = new EmployeesDAL();
-            var collection = new List<Employees>();
+            var dal = new UsersDAL();
+            var collection = new List<Users>();
             foreach (DataRow row in dal.GetAll().Rows)
             {
-                var instance = new Employees();
+                var instance = new Users();
                 instance.Bind(row);
                 collection.Add(instance);
             }
             return collection;
         }
-
-        public static List<Employees> LookUp()
+        public static List<Users> GetBySubscription(int subscriptionId)
         {
-            var dal = new EmployeesDAL();
-            var collection = new List<Employees>();
-            foreach (DataRow row in dal.GetAll().Rows)
+            var dal = new UsersDAL();
+            var collection = new List<Users>();
+            foreach (DataRow row in dal.GetBySubscription(subscriptionId).Rows)
             {
-                var instance = new Employees();
-                instance.BindLookUp(row);
+                var instance = new Users();
+                instance.Bind(row);
                 collection.Add(instance);
             }
             return collection;
-        }
-
-        public void BindLookUp(DataRow row)
-        {
-            if (row != null)
-            {
-                this.ID = Convert.ToInt32(row["ID"]);
-                this.FullName = string.Format("{0} {1}", row["FirstName"], row["LastName"]);
-
-            }
         }
         public void Bind(DataRow row)
         {
@@ -116,6 +108,8 @@ namespace InventoryManagement_PRASMM.Models
                 this.Discontinued = Convert.ToInt32(row["Discontinued"]);
                 this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
 
+                if (!DBNull.Value.Equals(row["SubscriptionID"]))
+                    this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
                 if (!DBNull.Value.Equals(row["Password"]))
                     this.Password = Convert.ToString(row["Password"]);
                 if (!DBNull.Value.Equals(row["FirstName"]))
@@ -153,17 +147,17 @@ namespace InventoryManagement_PRASMM.Models
         }
         public bool Save()
         {
-            var dal = new EmployeesDAL();
+            var dal = new UsersDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.UserName, this.Password, this.FirstName, this.MI, this.LastName, this.DepartmentID, this.ContactNo, this.EmailAddress, this.Address1, this.Address2, this.Address3, this.Address4, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID, this.SubscriptionID, this.UserName, this.Password, this.FirstName, this.MI, this.LastName, this.DepartmentID, this.ContactNo, this.EmailAddress, this.Address1, this.Address2, this.Address3, this.Address4, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
             this.ID = ret;
             return (ret > 0);
         }
         public static bool Delete(int id, int discontinuedby)
         {
-            var dal = new EmployeesDAL();
+            var dal = new UsersDAL();
             bool ret = dal.Delete(id, discontinuedby);
             return ret;
         }

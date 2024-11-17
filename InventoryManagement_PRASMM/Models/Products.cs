@@ -48,6 +48,7 @@ namespace InventoryManagement_PRASMM.Models
         #endregion
         #region Properties
         public int ID { get; set; }
+        public int SubscriptionID { get; set; }
         public string Name { get; set; }
         public int CategoryID { get; set; }
         public int SubCategoryID { get; set; }
@@ -95,6 +96,20 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new ProductsDAL();
             var collection = new List<Products>();
             foreach (DataRow row in dal.GetAll().Rows)
+            {
+                var instance = new Products();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
+
+        
+        public static List<Products> GetBySuscriptionId(int subscriptionId)
+        {
+            var dal = new ProductsDAL();
+            var collection = new List<Products>();
+            foreach (DataRow row in dal.GetBySuscriptionId(subscriptionId).Rows)
             {
                 var instance = new Products();
                 instance.Bind(row);
@@ -176,7 +191,7 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new ProductsDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.Name, this.CategoryID, this.SubCategoryID, this.BrandID, this.UnitID, this.SKU, this.MinQty, this.Qty, this.Description, this.TaxID, this.DiscountRate, this.Cost, this.MarkupRate, this.SRP, this.StatusID, this.ImageURL, this.FileName, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID,this.SubscriptionID, this.Name, this.CategoryID, this.SubCategoryID, this.BrandID, this.UnitID, this.SKU, this.MinQty, this.Qty, this.Description, this.TaxID, this.DiscountRate, this.Cost, this.MarkupRate, this.SRP, this.StatusID, this.ImageURL, this.FileName, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
             this.ID = ret;
             return (ret > 0);

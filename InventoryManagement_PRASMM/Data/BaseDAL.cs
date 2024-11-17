@@ -1,5 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿
 using System.Data;
+using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -18,13 +19,40 @@ namespace InventoryManagement_PRASMM.Data
         protected BaseDAL()
         {
             //add reference to System.Configuration.dll
+            var configurations = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            //string connStr = "Data Source=" + Decrypt(ConfigurationManager.AppSettings["srv"], true) + ";";
-            //connStr += "user=" + Decrypt(ConfigurationManager.AppSettings["user"], true) + ";";
-            //connStr += "password=" + Decrypt(ConfigurationManager.AppSettings["pwd"], true) + ";";
-            //connStr += " database=" + Decrypt(ConfigurationManager.AppSettings["db"], true) + ";";
+            bool isOnlineServer =Convert.ToBoolean(configurations["ServerType:IsOnline"]);
 
-            string connStr = "Server=sql5111.site4now.net;Database=db_aaeb12_inventory;User Id=db_aaeb12_inventory_admin;Password=Inv3nt0ryOnl1n3!;";
+            string serverName = "";
+            string userName = "";
+            string password = "";
+            string database = "";
+
+            if (isOnlineServer)
+            {
+                serverName = configurations["ConnectionStrings:Server"];
+                userName = configurations["ConnectionStrings:UserName"];
+                password = configurations["ConnectionStrings:Password"];
+                database = configurations["ConnectionStrings:Database"];
+            }
+            else
+            {
+                serverName =configurations["ConnectionStrings_Local:Server"];
+                userName = configurations["ConnectionStrings_Local:UserName"];
+                password = configurations["ConnectionStrings_Local:Password"];
+                database = configurations["ConnectionStrings_Local:Database"];
+            }
+            
+
+
+
+
+            string connStr = "Data Source=" + Decrypt(serverName, true) + ";";
+            connStr += "user=" + Decrypt(userName, true) + ";";
+            connStr += "password=" + Decrypt(password, true) + ";";
+            connStr += " database=" + Decrypt(database, true) + ";";
+
+            //string connStr = "Server=sql5111.site4now.net;Database=db_aaeb12_inventory;User Id=db_aaeb12_inventory_admin;Password=N0rthf4c3;";
 
             ////connection pooling
             ///**/

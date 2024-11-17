@@ -1,4 +1,5 @@
 ﻿using InventoryManagement_PRASMM.Data;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using System.Data;
 
 namespace InventoryManagement_PRASMM.Models
@@ -15,6 +16,8 @@ namespace InventoryManagement_PRASMM.Models
         public void init()
         {
             this.ID = 0;
+            this.SubscriptionID = 0;
+            this.ParentID = null;
             this.Code = "";
             this.Name = "";
             this.Description = "";
@@ -25,11 +28,14 @@ namespace InventoryManagement_PRASMM.Models
             this.DateCreated = DateTime.Now;
             this.ModifiedBy = 0;
             this.DateModified = DateTime.Now;
+            this.ParentCategory = "";
 
         }
         #endregion
         #region Properties
         public int ID { get; set; }
+        public int SubscriptionID { get; set; } 
+        public int? ParentID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -40,6 +46,7 @@ namespace InventoryManagement_PRASMM.Models
         public DateTime DateCreated { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime DateModified { get; set; }
+        public string ParentCategory { get; set; }
 
         #endregion
 
@@ -63,11 +70,40 @@ namespace InventoryManagement_PRASMM.Models
             }
             return collection;
         }
+        public static List<ProductCategory> GetBySubscription(int subscriptionId)
+        {
+            var dal = new ProductCategoryDAL();
+            var collection = new List<ProductCategory>();
+            foreach (DataRow row in dal.GetBySubscription(subscriptionId).Rows)
+            {
+                var instance = new ProductCategory();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
+
+        public static List<ProductCategory> GetSubCategoryBySubscription(int subscriptionId)
+        {
+            var dal = new ProductCategoryDAL();
+            var collection = new List<ProductCategory>();
+            foreach (DataRow row in dal.GetSubCategoryBySubscription(subscriptionId).Rows)
+            {
+                var instance = new ProductCategory();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
         public void Bind(DataRow row)
         {
             if (row != null)
             {
                 this.ID = Convert.ToInt32(row["ID"]);
+                this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
+
+                if (!DBNull.Value.Equals(row["ParentID"]))
+                    this.ParentID = Convert.ToInt32(row["ParentID"]);
                 this.Name = Convert.ToString(row["Name"]);
                 this.Discontinued = Convert.ToInt32(row["Discontinued"]);
                 this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
@@ -86,6 +122,9 @@ namespace InventoryManagement_PRASMM.Models
                     this.ModifiedBy = Convert.ToInt32(row["ModifiedBy"]);
                 if (!DBNull.Value.Equals(row["DateModified"]))
                     this.DateModified = Convert.ToDateTime(row["DateModified"]);
+                if (!DBNull.Value.Equals(row["ParentCategory"]))
+                    this.ParentCategory = Convert.ToString(row["ParentCategory"]);
+                
 
             }
         }
@@ -94,7 +133,7 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new ProductCategoryDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.Code, this.Name, this.Description, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID,this.SubscriptionID,this.ParentID, this.Code, this.Name, this.Description, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
             this.ID = ret;
             return (ret > 0);

@@ -13,7 +13,10 @@ namespace InventoryManagement_PRASMM.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            List<Suppliers> _list = Suppliers.GetAll();
+            //List<Suppliers> _list = Suppliers.GetAll();
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+            List<Suppliers> _list = Suppliers.GetBySubscriptionID(subscriptionId);
+            
             return Json(new { data = _list });
         }
         public ActionResult Details(int id)
@@ -42,7 +45,7 @@ namespace InventoryManagement_PRASMM.Controllers
         {
             Models.Suppliers _transaction = null;
             int userId = Convert.ToInt32(HttpContext.Session.GetInt32("UserID"));
-            int storeId = Convert.ToInt32(HttpContext.Session.GetInt32("StoreID"));
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
 
             string msg = "";
 
@@ -52,6 +55,7 @@ namespace InventoryManagement_PRASMM.Controllers
                 {
                     _transaction = new Models.Suppliers();
                     _transaction.CreatedBy = Convert.ToInt32(userId);
+                    _transaction.SubscriptionID = subscriptionId;
                     msg = "Record created successfully!";
                 }
                 else

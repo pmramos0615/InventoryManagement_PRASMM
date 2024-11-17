@@ -15,6 +15,7 @@ namespace InventoryManagement_PRASMM.Models
         public void init()
         {
             this.ID = 0;
+            this.SubscriptionID = 0;
             this.Name = "";
             this.Description = "";
             this.Discontinued = 0;
@@ -29,6 +30,7 @@ namespace InventoryManagement_PRASMM.Models
         #endregion
         #region Properties
         public int ID { get; set; }
+        public int SubscriptionID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Discontinued { get; set; }
@@ -54,6 +56,18 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new BrandsDAL();
             var collection = new List<Brands>();
             foreach (DataRow row in dal.GetAll().Rows)
+            {
+                var instance = new Brands();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
+        public static List<Brands> GetBySubscription(int subscriptionId)
+        {
+            var dal = new BrandsDAL();
+            var collection = new List<Brands>();
+            foreach (DataRow row in dal.GetBySubscription(subscriptionId).Rows)
             {
                 var instance = new Brands();
                 instance.Bind(row);
@@ -90,7 +104,7 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new BrandsDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.Name, this.Description, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID, this.SubscriptionID, this.Name, this.Description, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
             this.ID = ret;
             return (ret > 0);

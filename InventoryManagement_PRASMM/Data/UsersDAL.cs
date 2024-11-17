@@ -1,31 +1,39 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Data;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace InventoryManagement_PRASMM.Data
 {
-    internal class EmployeesDAL : BaseDAL
+    internal class UsersDAL : BaseDAL
     {
 
         public DataTable GetAll()
         {
-            base.com.CommandText = "spEmployees";
+            base.com.CommandText = "spUsers";
             base.com.Parameters.AddWithValue("@id", 0);
             return base.GetDataTable();
 
         }
+        
+        public DataTable GetBySubscription(int subscriptionId)
+        {
+            base.com.CommandText = "spUsersBySubscriptionID";
+            base.com.Parameters.AddWithValue("@subscriptionId", subscriptionId);
+            return base.GetDataTable();
 
+        }
         public DataRow GetById(int id)
         {
-            base.com.CommandText = "spEmployees";
+            base.com.CommandText = "spUsers";
             base.com.Parameters.AddWithValue("@id", id);
             return base.GetFirstRow();
         }
 
-        public int Save(int id, string username, string password, string firstname, string mi, string lastname, int departmentid, string contactno, string emailaddress, string address1, string address2, string address3, string address4, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
+        public int Save(int id, int subscriptionid, string username, string password, string firstname, string mi, string lastname, int departmentid, string contactno, string emailaddress, string address1, string address2, string address3, string address4, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
         {
             message = "";
-            base.com.CommandText = "spEmployeesUpdate";
+            base.com.CommandText = "spUsersUpdate";
             base.com.Parameters.AddWithValue("@id", id);
+            base.com.Parameters.AddWithValue("@subscriptionid", subscriptionid);
             base.com.Parameters.AddWithValue("@username", username);
             base.com.Parameters.AddWithValue("@password", password);
             base.com.Parameters.AddWithValue("@firstname", firstname);
@@ -57,7 +65,7 @@ namespace InventoryManagement_PRASMM.Data
                 switch (sqlex.Number)
                 {
                     case 2601:
-                        message = "Employees Name already exists!";
+                        message = "Users Name already exists!";
                         break;
                     default:
                         message = "Update failed!";
@@ -69,7 +77,7 @@ namespace InventoryManagement_PRASMM.Data
 
         public bool Delete(int id, int discontinuedby)
         {
-            base.com.CommandText = "spEmployeesDelete";
+            base.com.CommandText = "spUsersDelete";
             base.com.Parameters.AddWithValue("@id", id);
             base.com.Parameters.AddWithValue("@discontinuedby", discontinuedby);
 
@@ -80,7 +88,7 @@ namespace InventoryManagement_PRASMM.Data
             }
             catch
             {
-                throw new Exception("Delete employees failed!");
+                throw new Exception("Delete users failed!");
             }
             return (ra > 0);
         }

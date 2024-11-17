@@ -15,6 +15,7 @@ namespace InventoryManagement_PRASMM.Models
         public void init()
         {
             this.ID = 0;
+            this.SubscriptionID = 0;
             this.Name = "";
             this.Address = "";
             this.EmployeeID = 0;
@@ -32,6 +33,7 @@ namespace InventoryManagement_PRASMM.Models
         #endregion
         #region Properties
         public int ID { get; set; }
+        public int SubscriptionID { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public int EmployeeID { get; set; }
@@ -60,6 +62,18 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new StoresDAL();
             var collection = new List<Stores>();
             foreach (DataRow row in dal.GetAll().Rows)
+            {
+                var instance = new Stores();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
+        public static List<Stores> GetBySubscription(int subscriptionId)
+        {
+            var dal = new StoresDAL();
+            var collection = new List<Stores>();
+            foreach (DataRow row in dal.GetBySubscription(subscriptionId).Rows)
             {
                 var instance = new Stores();
                 instance.Bind(row);
@@ -101,7 +115,7 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new StoresDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.Name, this.Address, this.EmployeeID, this.ContactNo, this.EmailAddress, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID,this.SubscriptionID, this.Name, this.Address, this.EmployeeID, this.ContactNo, this.EmailAddress, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
             this.ID = ret;
             return (ret > 0);
