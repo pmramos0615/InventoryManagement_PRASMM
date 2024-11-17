@@ -1,33 +1,39 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Data;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace InventoryManagement_PRASMM.Data
 {
-    internal class ProductSubCategoryDAL : BaseDAL
+    internal class ReferenceLookUpDAL : BaseDAL
     {
 
         public DataTable GetAll()
         {
-            base.com.CommandText = "spProductSubCategory";
+            base.com.CommandText = "spReferenceLookUp";
             base.com.Parameters.AddWithValue("@id", 0);
             return base.GetDataTable();
 
         }
+        public DataTable GetByFilter(string filterDescription)
+        {
+            base.com.CommandText = "spReferenceLookUpByDescription";
+            base.com.Parameters.AddWithValue("@filterDescription", filterDescription);
+            return base.GetDataTable();
+
+        }
+        
 
         public DataRow GetById(int id)
         {
-            base.com.CommandText = "spProductSubCategory";
+            base.com.CommandText = "spReferenceLookUp";
             base.com.Parameters.AddWithValue("@id", id);
             return base.GetFirstRow();
         }
 
-        public int Save(int id, int categoryid, string code, string name, string description, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
+        public int Save(int id, string name, string description, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
         {
             message = "";
-            base.com.CommandText = "spProductSubCategoryUpdate";
+            base.com.CommandText = "spReferenceLookUpUpdate";
             base.com.Parameters.AddWithValue("@id", id);
-            base.com.Parameters.AddWithValue("@categoryid", categoryid);
-            base.com.Parameters.AddWithValue("@code", code);
             base.com.Parameters.AddWithValue("@name", name);
             base.com.Parameters.AddWithValue("@description", description);
             base.com.Parameters.AddWithValue("@discontinued", discontinued);
@@ -49,7 +55,7 @@ namespace InventoryManagement_PRASMM.Data
                 switch (sqlex.Number)
                 {
                     case 2601:
-                        message = "ProductSubCategory Name already exists!";
+                        message = "ReferenceLookUp Name already exists!";
                         break;
                     default:
                         message = "Update failed!";
@@ -61,7 +67,7 @@ namespace InventoryManagement_PRASMM.Data
 
         public bool Delete(int id, int discontinuedby)
         {
-            base.com.CommandText = "spProductSubCategoryDelete";
+            base.com.CommandText = "spReferenceLookUpDelete";
             base.com.Parameters.AddWithValue("@id", id);
             base.com.Parameters.AddWithValue("@discontinuedby", discontinuedby);
 
@@ -72,7 +78,7 @@ namespace InventoryManagement_PRASMM.Data
             }
             catch
             {
-                throw new Exception("Delete productsubcategory failed!");
+                throw new Exception("Delete referencelookup failed!");
             }
             return (ra > 0);
         }

@@ -13,6 +13,13 @@ namespace InventoryManagement_PRASMM.Data
             return base.GetDataTable();
 
         }
+        public DataTable GetBySuscriptionId(int subscriptionId)
+        {
+            base.com.CommandText = "spProductsBySubscriptionID";
+            base.com.Parameters.AddWithValue("@subscriptionId", subscriptionId);
+            return base.GetDataTable();
+
+        }
 
         public DataRow GetById(int id)
         {
@@ -21,11 +28,12 @@ namespace InventoryManagement_PRASMM.Data
             return base.GetFirstRow();
         }
 
-        public int Save(int id, string name, int categoryid, int subcategoryid, int brandid, int unitid, string sku, int minqty, int qty, string description, int taxid, int discountrate, decimal cost, decimal markuprate, decimal srp, int statusid, string imageurl, string filename, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
+        public int Save(int id,int subscriptionId, string name, int categoryid, int subcategoryid, int brandid, int unitid, string sku, int minqty, int qty, string description, int taxid, int discountrate, decimal cost, decimal markuprate, decimal srp, int statusid, string imageurl, string filename, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
         {
             message = "";
             base.com.CommandText = "spProductsUpdate";
             base.com.Parameters.AddWithValue("@id", id);
+            base.com.Parameters.AddWithValue("@subscriptionId", subscriptionId);
             base.com.Parameters.AddWithValue("@name", name);
             base.com.Parameters.AddWithValue("@categoryid", categoryid);
             base.com.Parameters.AddWithValue("@subcategoryid", subcategoryid);

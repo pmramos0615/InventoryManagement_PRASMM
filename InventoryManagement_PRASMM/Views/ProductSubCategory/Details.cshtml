@@ -1,4 +1,4 @@
-﻿@model InventoryManagement_PRASMM.Models.ProductSubCategory
+﻿@model InventoryManagement_PRASMM.Models.ProductCategory
 
 @{
     ViewBag.Title = "Details";
@@ -25,7 +25,7 @@
                     <div class="col-lg-4 col-sm-6 col-12">
                         <div class="form-group">
                             <label>Parent Category</label>
-                            @Html.DropDownListFor(a => a.CategoryID, new SelectList(ViewBag.Category, "ID", "Name"), "Select Parent Category", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+                            @Html.DropDownListFor(a => a.ParentID, new SelectList(ViewBag.Category, "ID", "Name"), "Select Parent Category", new { @class = "form-control select", @required = "true", @style = "width:100%" })
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 col-12">

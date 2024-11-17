@@ -15,7 +15,9 @@ namespace InventoryManagement_PRASMM.Controllers
         }
         public ActionResult List()
         {
-            List<Products> _list = Products.GetAll();
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+
+            List<Products> _list = Products.GetBySuscriptionId(subscriptionId);
             return Json(new { data = _list });
         }
 
@@ -23,12 +25,15 @@ namespace InventoryManagement_PRASMM.Controllers
         {
             Products _details;
 
-            ViewBag.Category = ProductCategory.GetAll();
-            ViewBag.SubCategory = ProductSubCategory.GetAll();
-            ViewBag.Brand = Brands.GetAll();
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+
+
+            ViewBag.Category = ProductCategory.GetBySubscription(subscriptionId);
+            ViewBag.SubCategory = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
+            ViewBag.Brand = Brands.GetBySubscription(subscriptionId);
             ViewBag.Unit = Units.GetAll();
             ViewBag.Discount = DiscountRate.GetAll();
-            ViewBag.Status = ProductStatus.GetAll();
+            ViewBag.Status = ReferenceLookUp.GetByFilter("Product Status");
 
             if (id == 0)
             {
@@ -48,6 +53,8 @@ namespace InventoryManagement_PRASMM.Controllers
         public ActionResult Save(Products _details)
         {
             Models.Products _transaction = null;
+            
+            int subscriptionId =  Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
             int userId = Convert.ToInt32(HttpContext.Session.GetInt32("UserID"));
             string msg = "";
 
@@ -56,7 +63,9 @@ namespace InventoryManagement_PRASMM.Controllers
                 if (_details.ID == 0)
                 {
                     _transaction = new Models.Products();
+                    _transaction.SubscriptionID = subscriptionId;
                     _transaction.CreatedBy = userId;
+
                     msg = "Record created successfully!";
                 }
                 else
@@ -65,6 +74,7 @@ namespace InventoryManagement_PRASMM.Controllers
                     _transaction.ModifiedBy = userId;
                     msg = "Record updated successfully!";
                 }
+               
                 _transaction.Name = _details.Name;
                 _transaction.CategoryID = _details.CategoryID;
                 _transaction.SubCategoryID = _details.SubCategoryID;

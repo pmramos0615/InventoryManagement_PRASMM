@@ -16,33 +16,36 @@ namespace InventoryManagement_PRASMM.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            List<ProductSubCategory> _list = ProductSubCategory.GetAll();
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+            List<ProductCategory> _list = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
             return Json(new { data = _list });
         }
         public ActionResult Details(int id)
         {
-            ProductSubCategory _details;
+            ProductCategory _details;
 
-            ViewBag.Category = ProductCategory.GetAll();
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+            ViewBag.Category = ProductCategory.GetBySubscription(subscriptionId);
 
             if (id == 0)
             {
                 ViewBag.Caption = "Create new product Category";
-                _details = new ProductSubCategory();
+                _details = new ProductCategory();
             }
             else
             {
                 ViewBag.Caption = "Edit product Category";
-                _details = Models.ProductSubCategory.GetById(id);
+                _details = Models.ProductCategory.GetById(id);
             }
 
             return View(_details);
 
         }
 
-        public ActionResult Save(ProductSubCategory _details)
+        public IActionResult Save(ProductCategory _details)
         {
-            Models.ProductSubCategory _transaction = null;
+            Models.ProductCategory _transaction = null;
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
             int userId = Convert.ToInt32(HttpContext.Session.GetInt32("UserID"));
             string msg = "";
 
@@ -50,17 +53,18 @@ namespace InventoryManagement_PRASMM.Controllers
             {
                 if (_details.ID == 0)
                 {
-                    _transaction = new Models.ProductSubCategory();
-                    _transaction.CreatedBy = Convert.ToInt32(userId);
+                    _transaction = new Models.ProductCategory();
+                    _transaction.CreatedBy = userId;
+                    _transaction.SubscriptionID = subscriptionId;
                     msg = "Record created successfully!";
                 }
                 else
                 {
-                    _transaction = Models.ProductSubCategory.GetById(_details.ID);
-                    _transaction.ModifiedBy = Convert.ToInt32(userId);
+                    _transaction = Models.ProductCategory.GetById(_details.ID);
+                    _transaction.ModifiedBy = userId;
                     msg = "Record updated successfully!";
                 }
-                _transaction.CategoryID = _details.CategoryID;
+                _transaction.ParentID = _details.ParentID;
                 _transaction.Name = _details.Name;
                 _transaction.Code = _details.Code;
                 _transaction.Description = _details.Description;
@@ -86,7 +90,7 @@ namespace InventoryManagement_PRASMM.Controllers
             string msg = "";
             int userId = Convert.ToInt32(HttpContext.Session.GetInt32("UserID"));
 
-            if (ProductSubCategory.Delete(id, Convert.ToInt32(userId)))
+            if (ProductCategory.Delete(id, Convert.ToInt32(userId)))
             {
                 status = true;
                 msg = "Deleted Successfully";

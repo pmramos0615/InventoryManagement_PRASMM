@@ -13,6 +13,15 @@ namespace InventoryManagement_PRASMM.Data
             return base.GetDataTable();
 
         }
+        public DataTable GetBySubscriptionID(int subscriptionId)
+        {
+            base.com.CommandText = "spSuppliersBySubscriptionID";
+            base.com.Parameters.AddWithValue("@subscriptionId", subscriptionId);
+            return base.GetDataTable();
+
+        }
+
+        
 
         public DataRow GetById(int id)
         {
@@ -21,12 +30,13 @@ namespace InventoryManagement_PRASMM.Data
             return base.GetFirstRow();
         }
 
-        public int Save(int id, string name, string address1, string address2, int termid, string contactno, string contactperson, string emailaddress, string description, string vatref, int taxtypeid, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
+        public int Save(int id, int subscriptionId, string name, string address1, string address2, int termid, string contactno, string contactperson, string emailaddress, string description, string vatref, int taxtypeid, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
         {
             message = "";
             base.com.CommandText = "spSuppliersUpdate";
             base.com.Parameters.AddWithValue("@id", id);
             base.com.Parameters.AddWithValue("@name", name);
+            base.com.Parameters.AddWithValue("@subscriptionId", subscriptionId);
             base.com.Parameters.AddWithValue("@address1", address1);
             base.com.Parameters.AddWithValue("@address2", address2);
             base.com.Parameters.AddWithValue("@termid", termid);

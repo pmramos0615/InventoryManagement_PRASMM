@@ -14,7 +14,8 @@ namespace InventoryManagement_PRASMM.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            List<ProductCategory> _list = ProductCategory.GetAll();
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+            List<ProductCategory> _list = ProductCategory.GetBySubscription(subscriptionId);
             return Json(new { data = _list });
         }
 
@@ -42,6 +43,7 @@ namespace InventoryManagement_PRASMM.Controllers
         public IActionResult Save(ProductCategory _details)
         {
             Models.ProductCategory _transaction = null;
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
             int userId = Convert.ToInt32(HttpContext.Session.GetInt32("UserID"));
             string msg = "";
 
@@ -51,6 +53,7 @@ namespace InventoryManagement_PRASMM.Controllers
                 {
                     _transaction = new Models.ProductCategory();
                     _transaction.CreatedBy = userId;
+                    _transaction.SubscriptionID = subscriptionId;
                     msg = "Record created successfully!";
                 }
                 else

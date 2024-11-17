@@ -3,11 +3,11 @@ using System.Data;
 
 namespace InventoryManagement_PRASMM.Models
 {
-    public class ProductStatus
+    public class ReferenceLookUp
     {
 
         #region CONSTRUCTOR
-        public ProductStatus()
+        public ReferenceLookUp()
         {
             this.init();
         }
@@ -16,6 +16,7 @@ namespace InventoryManagement_PRASMM.Models
         {
             this.ID = 0;
             this.Name = "";
+            this.Description = "";
             this.Discontinued = 0;
             this.DiscontinuedBy = 0;
             this.DateDiscontinued = DateTime.Now;
@@ -29,6 +30,7 @@ namespace InventoryManagement_PRASMM.Models
         #region Properties
         public int ID { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public int Discontinued { get; set; }
         public int DiscontinuedBy { get; set; }
         public DateTime DateDiscontinued { get; set; }
@@ -40,20 +42,32 @@ namespace InventoryManagement_PRASMM.Models
         #endregion
 
         #region Public Methods
-        public static ProductStatus GetById(int id)
+        public static ReferenceLookUp GetById(int id)
         {
-            var dal = new ProductStatusDAL();
-            var instance = new ProductStatus();
+            var dal = new ReferenceLookUpDAL();
+            var instance = new ReferenceLookUp();
             instance.Bind(dal.GetById(id));
             return instance;
         }
-        public static List<ProductStatus> GetAll()
+        public static List<ReferenceLookUp> GetAll()
         {
-            var dal = new ProductStatusDAL();
-            var collection = new List<ProductStatus>();
+            var dal = new ReferenceLookUpDAL();
+            var collection = new List<ReferenceLookUp>();
             foreach (DataRow row in dal.GetAll().Rows)
             {
-                var instance = new ProductStatus();
+                var instance = new ReferenceLookUp();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
+        public static List<ReferenceLookUp> GetByFilter(string filterDescription)
+        {
+            var dal = new ReferenceLookUpDAL();
+            var collection = new List<ReferenceLookUp>();
+            foreach (DataRow row in dal.GetByFilter(filterDescription).Rows)
+            {
+                var instance = new ReferenceLookUp();
                 instance.Bind(row);
                 collection.Add(instance);
             }
@@ -68,6 +82,8 @@ namespace InventoryManagement_PRASMM.Models
                 this.Discontinued = Convert.ToInt32(row["Discontinued"]);
                 this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
 
+                if (!DBNull.Value.Equals(row["Description"]))
+                    this.Description = Convert.ToString(row["Description"]);
                 if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
                     this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
                 if (!DBNull.Value.Equals(row["DateDiscontinued"]))
@@ -83,17 +99,17 @@ namespace InventoryManagement_PRASMM.Models
         }
         public bool Save()
         {
-            var dal = new ProductStatusDAL();
+            var dal = new ReferenceLookUpDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.Name, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID, this.Name, this.Description, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
             this.ID = ret;
             return (ret > 0);
         }
         public static bool Delete(int id, int discontinuedby)
         {
-            var dal = new ProductStatusDAL();
+            var dal = new ReferenceLookUpDAL();
             bool ret = dal.Delete(id, discontinuedby);
             return ret;
         }

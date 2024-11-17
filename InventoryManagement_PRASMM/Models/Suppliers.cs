@@ -15,6 +15,7 @@ namespace InventoryManagement_PRASMM.Models
         public void init()
         {
             this.ID = 0;
+            this.SubscriptionID = 0;
             this.Name = "";
             this.Address1 = "";
             this.Address2 = "";
@@ -37,6 +38,7 @@ namespace InventoryManagement_PRASMM.Models
         #endregion
         #region Properties
         public int ID { get; set; }
+        public int SubscriptionID { get; set; }
         public string Name { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
@@ -79,6 +81,18 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new SuppliersDAL();
             var collection = new List<Suppliers>();
             foreach (DataRow row in dal.GetAll().Rows)
+            {
+                var instance = new Suppliers();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
+        public static List<Suppliers> GetBySubscriptionID(int subscriptionId)
+        {
+            var dal = new SuppliersDAL();
+            var collection = new List<Suppliers>();
+            foreach (DataRow row in dal.GetBySubscriptionID(subscriptionId).Rows)
             {
                 var instance = new Suppliers();
                 instance.Bind(row);
@@ -131,7 +145,7 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new SuppliersDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.Name, this.Address1, this.Address2, this.TermID, this.ContactNo, this.ContactPerson, this.EmailAddress, this.Description, this.VATRef, this.TaxTypeID, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID, this.SubscriptionID, this.Name, this.Address1, this.Address2, this.TermID, this.ContactNo, this.ContactPerson, this.EmailAddress, this.Description, this.VATRef, this.TaxTypeID, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
             this.ID = ret;
             return (ret > 0);
