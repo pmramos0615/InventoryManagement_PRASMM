@@ -1,0 +1,96 @@
+﻿@model InventoryManagement_PRASMM.Models.PurchaseOrderHeader
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="page-header">
+        <div class="page-title">
+            <h4>Purchase list</h4>
+            <h6>Manage your purchases</h6>
+        </div>
+        <div class="page-btn">
+            <a href="@Url.Action("Details", "PurchaseOrder", new { id="0"})" class="btn btn-added">
+                <img src="img/icons/plus.svg" class="me-1" alt="img">Add  New Purchases
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["success"] != null)
+    {
+
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <!-- /purchase list -->
+    <div class="card">
+        <div class="card-body">
+            <!-- /Filter -->
+            <div class="table-responsive">
+                <div class="card" id="filter_inputs" style="display: block;">
+                    <div class="card-body pb-0">
+                        <div class="row">
+                            <div class="col-lg col-sm-6 col-12">
+                                <div class="form-group">
+                                    @Html.DropDownListFor(a => a.SupplierID, new SelectList(ViewBag.Suppliers, "ID", "Name"), "All Suppliers", new { @class = "form-control select2 select2-container select2-container--default ", @required = "true", @style = "width:100%",@id="SupplierName" })
+                                </div>
+                            </div>
+                            <div class="col-lg col-sm-6 col-12">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(a => a.PONo, new { @class = "form-control", @required = "true",@placeholder="PO Number" })
+
+                                </div>
+                            </div>
+                            <div class="col-lg col-sm-6 col-12">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(a => a.DateFrom,"{0:yyyy-MM-dd}", new { @class = "form-control datetimepicker", @required = "true",@type="date"})
+                                </div>
+                            </div>
+                            <div class="col-lg col-sm-6 col-12">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(a => a.DateTo,"{0:yyyy-MM-dd}", new { @class = "form-control datetimepicker", @required = "true",@type="date"})
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <a class="btn btn-filters ms-auto" id="btnSearch"><img src="~/img/icons/search-whites.svg" alt="img"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="datatableList" class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Supplier Name</th>
+                            <th>Po Number</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Grand Total</th>
+                            <th>Paid</th>
+                            <th>Due</th>
+                            <th>Payment Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="~/js/pages/purchaseorder.js"></script>
+}
