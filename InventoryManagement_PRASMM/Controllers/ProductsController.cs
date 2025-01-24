@@ -1,9 +1,5 @@
 ﻿using InventoryManagement_PRASMM.Models;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 
 namespace InventoryManagement_PRASMM.Controllers
 {
@@ -55,7 +51,7 @@ namespace InventoryManagement_PRASMM.Controllers
             return RedirectToAction("Index");
             }
         }
-
+        
         public ActionResult Save(Products _details)
         {
             Models.Products _transaction = null;
@@ -81,23 +77,29 @@ namespace InventoryManagement_PRASMM.Controllers
                     msg = "Record updated successfully!";
                 }
                
-                _transaction.Name = _details.Name;
                 _transaction.CategoryID = _details.CategoryID;
                 _transaction.SubCategoryID = _details.SubCategoryID;
                 _transaction.BrandID = _details.BrandID;
                 _transaction.UnitID = _details.UnitID;
                 _transaction.SKU = _details.SKU;
+                _transaction.TaxID = 0;
+                _transaction.DiscountRateID = _details.DiscountRateID;
+                _transaction.StatusID = _details.StatusID;
                 _transaction.MinQty = _details.MinQty;
                 _transaction.Qty = _details.Qty;
+                _transaction.Name = _details.Name;
                 _transaction.Description = _details.Description;
-                _transaction.TaxID = 0;
-                _transaction.DiscountRate = _details.DiscountRate;
                 _transaction.Cost = _details.Cost;
+                _transaction.MarkupRate = _details.MarkupRate;
                 _transaction.SRP = _details.SRP;
-                _transaction.StatusID = _details.StatusID;
 
-                string file = "", randomfilename = "", filepath = "";
+                if (_details.Attachment != null && _details.Attachment.Length > 0) 
+                {
+                    _transaction.FileName = Path.GetFileName(_details.Attachment.FileName);
+                    _transaction.ImageURL = Path.Combine("~/Uploads/Products/", _details.Attachment.FileName);
 
+                }
+                
                 //if (_details.Attachment != null)
                 //{
                 //    file = Path.GetFileName(_details.Attachment.FileName).ToString().Replace(" ", "_");

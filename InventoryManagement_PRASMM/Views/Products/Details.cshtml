@@ -86,7 +86,7 @@
 							<div class="col-lg-3 col-sm-6">
 								<div class="form-group">
 									<label>Discount Type</label>
-									@Html.DropDownListFor(a => a.DiscountRate, new SelectList(ViewBag.Discount, "ID", "Name"), "Percentage", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+									@Html.DropDownListFor(a => a.DiscountRateID, new SelectList(ViewBag.Discount, "ID", "Name"), "Percentage", new { @class = "form-control select", @required = "true", @style = "width:100%" })
 								</div>
 							</div>
 							<div class="col-lg-3 col-sm-6">
@@ -98,8 +98,25 @@
 							<div class="col-lg-3 col-sm-6">
 								<div class="form-group">
 									<label>Image</label>
+									@* <div class="input-group">
+                                                <div class="input-group-text" id="btnGroupAddon">@</div>
+                                                <input type="text" class="form-control" placeholder="Input group example" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                                            </div> *@
 									<div class="input-group">
-										<input type="file" class="form-control" placeholder="Input group example" aria-label="Input group example" aria-describedby="btnGroupAddon">
+										@if (@Model.ID == 0)
+										{
+											<button type="button" class="fc-button-group btn btn-dark" style="width:200px;" id="file-choose">Choose File</button>
+											<input type="text" class="form-control" id="input-text" value="@Model.FileName" readonly/>
+											<input type="file" style="display:none" name="Attachment" id="file-input" />
+											
+											
+										}
+										else {
+											<button type="button" class="input-group-prepend btn btn-dark" style="width:200px;" id="file-choose">Choose File</button>
+											<input type="text" class="form-control" id="input-text" value="@Model.FileName" readonly/>
+											<input type="file" style="display:none" name="Attachment" id="file-input"/>
+											
+										}
 									</div>
 								</div>
 							</div>
