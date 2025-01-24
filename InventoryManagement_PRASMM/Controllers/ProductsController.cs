@@ -9,6 +9,14 @@ namespace InventoryManagement_PRASMM.Controllers
 {
     public class ProductsController : Controller
     {
+        public void ViewsViewbag(int subscriptionId) {
+            ViewBag.Category = ProductCategory.GetBySubscription(subscriptionId);
+            ViewBag.SubCategory = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
+            ViewBag.Brand = Brands.GetBySubscription(subscriptionId);
+            ViewBag.Unit = Units.GetAll();
+            ViewBag.Discount = DiscountRate.GetAll();
+            ViewBag.Status = ReferenceLookUp.GetByFilter("Product Status");
+        }
         public IActionResult Index()
         {
             return View();
@@ -20,34 +28,32 @@ namespace InventoryManagement_PRASMM.Controllers
             List<Products> _list = Products.GetBySuscriptionId(subscriptionId);
             return Json(new { data = _list });
         }
-
-        public ActionResult Details(int id)
+        public ActionResult Details(int ?id)
         {
-            Products _details;
-
-            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
-
-
-            ViewBag.Category = ProductCategory.GetBySubscription(subscriptionId);
-            ViewBag.SubCategory = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
-            ViewBag.Brand = Brands.GetBySubscription(subscriptionId);
-            ViewBag.Unit = Units.GetAll();
-            ViewBag.Discount = DiscountRate.GetAll();
-            ViewBag.Status = ReferenceLookUp.GetByFilter("Product Status");
-
-            if (id == 0)
+            if (id.HasValue && id >= 0)
             {
-                ViewBag.Caption = "Create new product";
-                _details = new Products();
-            }
-            else
-            {
-                ViewBag.Caption = "Edit product";
-                _details = Models.Products.GetById(id);
-            }
+                int idValue = Convert.ToInt32(id);
+                Products _details;
 
-            return View(_details);
-
+                int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+                ViewsViewbag(subscriptionId);
+                if (id == 0)
+                {
+                    ViewBag.Caption = "Create new product";
+                    _details = new Products();
+                }
+                else
+                {
+                    ViewBag.Caption = "Edit product";
+                    _details = Models.Products.GetById(idValue);
+                }
+                
+                return View(_details);
+            }
+            else 
+            { 
+            return RedirectToAction("Index");
+            }
         }
 
         public ActionResult Save(Products _details)
