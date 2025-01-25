@@ -3,23 +3,26 @@
         "ajax": {
             "url": "/Products/List",
             "type": "Get",
-            "datatype": "json",
-        },
-        layout: {
-            topStart: 'pageLength',
-            topEnd: 'search',
-            bottomStart: 'info',
-            bottomEnd: 'paging'
+            "datatype": "json"
         },
         "columns": [
-            { "data": "name", "autoWidth": true }, //index 0
-            { "data": "sku", "autoWidth": true }, //index 0
-            { "data": "category", "autoWidth": true }, //index 0
-            { "data": "brand", "autoWidth": true }, //index 0
-            { "data": "srp", "autoWidth": true }, //index 0
-            { "data": "unit", "autoWidth": true }, //index 0
-            { "data": "qty", "autoWidth": true }, //index 0
-            { "data": "createdBy", "autoWidth": true }, //index 0
+            {
+                "data": "name",
+                "autoWidth": true,
+                "render": function (data, type, row) {
+                    return `<div style="display: flex; align-items: center;">
+                    <img src="${row.imageURL}" alt="" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                    <span>${data}</span>
+                </div>`;
+                }
+            },
+            { "data": "sku", "autoWidth": true }, 
+            { "data": "category", "autoWidth": true }, 
+            { "data": "brand", "autoWidth": true }, 
+            { "data": "srp", "autoWidth": true },
+            { "data": "unit", "autoWidth": true },
+            { "data": "qty", "autoWidth": true },
+            { "data": "createdBy", "autoWidth": true },
             {
                 "data": "id", "width": "100px", "render": function (data) {
                     return '<a class="me-3 btnEdit" href="/Products/Details/' + data + '"><img src="img/icons/edit.svg" alt="img"></a>';
@@ -28,11 +31,6 @@
         ],
         "language": {
             "emptyTable": "No data found, Please click on <b>Add New</b> button"
-        },
-                     // Info and pagination
-        "initComplete": function () {
-            // Add the 'form-control' class to the search input
-            $('#datatableList_filter input').addClass('form-control');
         }
     });
     oTable = $('#datatableList').DataTable();

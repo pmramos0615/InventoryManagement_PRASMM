@@ -49,8 +49,11 @@ namespace InventoryManagement_PRASMM.Models
         public int SubscriptionID { get; set; }
         public string Name { get; set; }
         public int CategoryID { get; set; }
+        public string Category { get; set; }
         public int SubCategoryID { get; set; }
+        public string ?Subcategory{ get; set; }
         public int BrandID { get; set; }
+        public string Brand { get; set; }
         public int UnitID { get; set; }
         public string SKU { get; set; }
         public int MinQty { get; set; }
@@ -71,8 +74,8 @@ namespace InventoryManagement_PRASMM.Models
         public DateTime DateCreated { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime DateModified { get; set; }
-        public string Category { get; private set; }
-        public string Brand { get; private set; }
+       
+       
         public string Unit { get; private set; }
         public string FileName { get; internal set; }
         public IWebHostEnvironment ?_webHostEnvironment{ get; set; }         
@@ -124,12 +127,20 @@ namespace InventoryManagement_PRASMM.Models
 
                 if (!DBNull.Value.Equals(row["CategoryID"]))
                     this.CategoryID = Convert.ToInt32(row["CategoryID"]);
+                if (!DBNull.Value.Equals(row["Category"]))
+                    this.Category = Convert.ToString(row["Category"]);
                 if (!DBNull.Value.Equals(row["SubCategoryID"]))
                     this.SubCategoryID = Convert.ToInt32(row["SubCategoryID"]);
+                if (!DBNull.Value.Equals(row["SubCategory"]))
+                    this.Subcategory = Convert.ToString(row["Subcategory"]);
                 if (!DBNull.Value.Equals(row["BrandID"]))
                     this.BrandID = Convert.ToInt32(row["BrandID"]);
+                if (!DBNull.Value.Equals(row["Brand"]))
+                    this.Brand = Convert.ToString(row["Brand"]);
                 if (!DBNull.Value.Equals(row["UnitID"]))
                     this.UnitID = Convert.ToInt32(row["UnitID"]);
+                if (!DBNull.Value.Equals(row["Unit"]))
+                    this.Unit = Convert.ToString(row["Unit"]);
                 if (!DBNull.Value.Equals(row["SKU"]))
                     this.SKU = Convert.ToString(row["SKU"]);
                 if (!DBNull.Value.Equals(row["TaxID"]))

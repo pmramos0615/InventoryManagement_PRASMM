@@ -5,6 +5,11 @@ namespace InventoryManagement_PRASMM.Controllers
 {
     public class ProductsController : Controller
     {
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public ProductsController(IWebHostEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
         public void ViewsViewbag(int subscriptionId) {
             ViewBag.Category = ProductCategory.GetBySubscription(subscriptionId);
             ViewBag.SubCategory = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
@@ -52,7 +57,7 @@ namespace InventoryManagement_PRASMM.Controllers
             }
         }
         
-        public ActionResult Save(Products _details)
+        public  ActionResult Save(Products _details)
         {
             Models.Products _transaction = null;
             
@@ -96,33 +101,36 @@ namespace InventoryManagement_PRASMM.Controllers
                 if (_details.Attachment != null && _details.Attachment.Length > 0) 
                 {
                     _transaction.FileName = Path.GetFileName(_details.Attachment.FileName);
-                    _transaction.ImageURL = Path.Combine("~/Uploads/Products/", _details.Attachment.FileName);
-
+                    if (_details.ID == 0)
+                    {
+                        var Utils = new Utils();
+                        //get the max ID plus 1 to get the next current ID
+                        _transaction.ImageURL = Path.Combine(_hostingEnvironment.WebRootPath+ "\\Uploads\\Products\\", subscriptionId + "_" + (Utils.GetNewTransactionID(1)+1) + "_" + _details.Attachment.FileName);
+                    }
+                    else {
+                        _transaction.ImageURL = Path.Combine(_hostingEnvironment.WebRootPath+ "\\Uploads\\Products\\", subscriptionId + "_"+_details.ID + "_" + _details.Attachment.FileName);
+                    }
                 }
-                
-                //if (_details.Attachment != null)
-                //{
-                //    file = Path.GetFileName(_details.Attachment.FileName).ToString().Replace(" ", "_");
-                //    randomfilename = Guid.NewGuid().ToString().Substring(0, 6) + Path.GetExtension(file);
-                //    filepath = "~/UploadedFiles/" + randomfilename;
-
-                //    HttpPostedFileBase fileBase = _details.Attachment;
-                //    fileBase.SaveAs(Server.MapPath(filepath));
-
-                //    _transaction.FileName = randomfilename;
-                //    _transaction.ImageURL = filepath;
-                //}
 
                 if (_transaction.Save())
                 {
-                    TempData["success"] = msg;
+                    string FilePath = Path.Combine(_hostingEnvironment.WebRootPath,"Uploads\\Products\\");
+                    if (!Directory.Exists(FilePath)) {
+                        Directory.CreateDirectory(FilePath);
+                    }
+                    string fileName = Path.GetFileName(_transaction.ImageURL); // Use proper file name logic
+                    string fullPath = Path.Combine(FilePath, fileName);
+                    using (var stream = new FileStream(fullPath, FileMode.CreateNew)) 
+                    {
+                         _details.Attachment.CopyTo(stream);
+                    }
+                        TempData["success"] = msg;
                 }
                 else
                 {
                     TempData["error"] = "Problem occurred while saving record. Please try again!";
                 }
             }
-
             return RedirectToAction("Index");
         }
         [HttpGet]
