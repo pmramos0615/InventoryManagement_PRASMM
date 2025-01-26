@@ -1,102 +1,187 @@
 ﻿@model InventoryManagement_PRASMM.Models.Products
 
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="content">
-    <div class="page-header">
-        <div class="page-title">
-            <h4>Product Details</h4>
-            <h6>@ViewBag.Caption</h6>
-        </div>
-    </div>
-    <!-- /add -->
-    <div class="card">
-        @using (Html.BeginForm("Save", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            if (Model != null && Model.ID > 0)
-            {
-                @Html.HiddenFor(a => a.ID)
-            }
+	<div class="page-header">
+		<div class="page-title">
+			<h4>Product Details</h4>
+			<h6>@ViewBag.Caption</h6>
+		</div>
+	</div>
+	<!-- /add -->
+	<div class="card">
+		@using (Html.BeginForm("Save", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+		{
+			if (Model != null && Model.ID > 0)
+			{
+				@Html.HiddenFor(a => a.ID)
+			}
 
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Product Name</label>
-                            @Html.TextBoxFor(a => a.Name, new { @class = "form-control", @required = "true" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Category</label>
-                            @Html.DropDownListFor(a => a.CategoryID, new SelectList(ViewBag.Category, "ID", "Name"), "Select Category", new { @class = "form-control select", @required = "true", @style = "width:100%" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Sub Category</label>
-                            @Html.DropDownListFor(a => a.SubCategoryID, new SelectList(ViewBag.SubCategory, "ID", "Name"), "Select Sub Category", new { @class = "form-control select ", @required = "true", @style = "width:100%" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Brand</label>
-                            @Html.DropDownListFor(a => a.BrandID, new SelectList(ViewBag.Brand, "ID", "Name"), "Select Brand", new { @class = "form-control select", @required = "true", @style = "width:100%" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Unit</label>
-                            @Html.DropDownListFor(a => a.UnitID, new SelectList(ViewBag.Unit, "ID", "Name"), "Select Unit", new { @class = "form-control select", @required = "true", @style = "width:100%" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>SKU</label>
-                            @Html.TextBoxFor(a => a.SKU, new { @class = "form-control", @required = "true" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Minimum Qty</label>
-                            @Html.TextBoxFor(a => a.MinQty, new { @class = "form-control", @required = "true" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Re-order Qty</label>
-                            @Html.TextBoxFor(a => a.Qty, new { @class = "form-control", @required = "true" })
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label>Description</label>
-                            @Html.TextBoxFor(a => a.Description, new { @class = "form-control", @required = "true" })
-                        </div>
-                    </div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12">
+						<div class="row">
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Product Name</label>
+									@Html.TextBoxFor(a => a.Name, new { @class = "form-control", @required = "true" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>SKU</label>
+									@Html.TextBoxFor(a => a.SKU, new { @class = "form-control", @required = "true" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Minimum Qty</label>
+									@Html.TextBoxFor(a => a.MinQty, new { @class = "form-control", @required = "true" ,@type="number"})
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Re-order Qty</label>
+									@Html.TextBoxFor(a => a.Qty, new { @class = "form-control", @required = "true", @type = "number" })
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Category</label>
+									@Html.DropDownListFor(a => a.CategoryID, new SelectList(ViewBag.Category, "ID", "Name"), "Select Category", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Sub Category</label>
+									@Html.DropDownListFor(a => a.SubCategoryID, new SelectList(ViewBag.SubCategory, "ID", "Name"), "Select Sub Category", new { @class = "form-control select ", @required = "true", @style = "width:100%" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Brand</label>
+									@Html.DropDownListFor(a => a.BrandID, new SelectList(ViewBag.Brand, "ID", "Name"), "Select Brand", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Unit</label>
+									@Html.DropDownListFor(a => a.UnitID, new SelectList(ViewBag.Unit, "ID", "Name"), "Select Unit", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Price</label>
+									@Html.TextBoxFor(a => a.SRP, new { @class = "form-control", @required = "true" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Discount Type</label>
+									@Html.DropDownListFor(a => a.DiscountRateID, new SelectList(ViewBag.Discount, "ID", "Name"), "Percentage", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>	Status</label>
+									@Html.DropDownListFor(a => a.StatusID, new SelectList(ViewBag.Status, "ID", "Name"), "Select Status", new { @class = "form-control select", @required = "true", @style = "width:100%" })
+								</div>
+							</div>
+							<div class="col-lg-3 col-sm-6">
+								<div class="form-group">
+									<label>Image</label>
+									@* <div class="input-group">
+                                                <div class="input-group-text" id="btnGroupAddon">@</div>
+                                                <input type="text" class="form-control" placeholder="Input group example" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                                            </div> *@
+									<div class="input-group">
+										@if (@Model.ID == 0)
+										{
+											<button type="button" class="fc-button-group btn btn-dark" style="width:200px;" id="file-choose">Choose File</button>
+											<input type="text" class="form-control" id="input-text" value="@Model.FileName" readonly/>
+											<input type="file" style="display:none" name="Attachment" id="file-input" />
+											
+											
+										}
+										else {
+											<button type="button" class="input-group-prepend btn btn-dark" style="width:200px;" id="file-choose">Choose File</button>
+											<input type="text" class="form-control" id="input-text" value="@Model.FileName" readonly/>
+											<input type="file" style="display:none" name="Attachment" id="file-input"/>
+											
+										}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="form-group">
+									<label>Description</label>
+									@Html.TextAreaFor(a => a.Description, new { @class = "form-control", @required = "true", @style = "height: 60px;" })
+								</div>
+							</div>
+						</div>
+						@* uncomment this will be useful for multiple image upload
+							<div class="row mt-2">
+							<div class="accordion accordion-solid-primary accordion-collapse" id="accordionPrimarySolidExample">
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingPrimarySolidOne">
+										<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrimarySolidOne" aria-expanded="true" aria-controls="collapsePrimarySolidOne">
+											Product Image
+										</button>
+									</h2>
+									<div id="collapsePrimarySolidOne" class="accordion-collapse collapse " aria-labelledby="headingPrimarySolidOne" data-bs-parent="#accordionPrimarySolidExample" style="">
+										<div class="accordion-body">
+											<div class="text-editor add-list add">
+												<div class="col-2">
+													<div class="add-choosen">
+														<div class="input-blocks">
+															<div class="image-upload align-center mt-1">
+																<input type="file">
+																<div class="image-uploads">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle plus-down-add me-0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+																	<h4>Add Images</h4>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> *@
+						<div class="row mt-lg-2">
+							<div class="col-12">
+								<div class="float-end">
+									@if (Model.ID > 0)
+									{
+										<button type="button" class="btn btn-danger btn-w-m" id="btnDelete" style="width:150px;">Delete</button>
+										@Html.Hidden("RedirectTo", Url.Action("Index", "Products"))
+									}
+									<button class="btn btn-primary" type="submit" style="width:150px;">Save changes</button>
+									<a href="@Url.Action("Index", "Products")" class="btn btn-dark" style="width:150px;">Cancel</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
 
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Discount Type</label>
-                            @Html.DropDownListFor(a => a.DiscountRate, new SelectList(ViewBag.Discount, "ID", "Name"), "Percentage", new { @class = "form-control select", @required = "true", @style = "width:100%" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>Price</label>
-                            @Html.TextBoxFor(a => a.SRP, new { @class = "form-control", @required = "true" })
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label>	Status</label>
-                            @Html.DropDownListFor(a => a.StatusID, new SelectList(ViewBag.Status, "ID", "Name"), "Select Status", new { @class = "form-control select", @required = "true", @style = "width:100%" })
-                        </div>
-                    </div>
-                    @*<div class="col-lg-12">
+
+					
+						
+					
+
+					@*<div class="col-lg-12">
                         <div class="form-group">
                             <label>	Product Image</label>
                             <div class="image-upload">
@@ -127,20 +212,12 @@
                         </div>
                     }
 *@
-                    <div class="col-lg-12">
-                        <button class="btn btn-submit me-2" type="submit">Save changes</button>
-                        @if (Model.ID > 0)
-                        {
-                            <a href="#" class="btn btn-danger" id="btnDelete">Delete</a>
-                            @Html.Hidden("RedirectTo", Url.Action("Index", "Products"));
-                        }
-                        <a href="@Url.Action("Index", "Products")" class="btn btn-cancel">Cancel</a>
-                    </div>
-                </div>
-            </div>
-        }
+					
+				</div>
+			</div>
+		}
 
-    </div>
-    @section scripts{
-        <script src="~/js/pages/products.js"></script>
-    }
+	</div>
+	@section scripts {
+		<script src="~/js/pages/products.js"></script>
+	}

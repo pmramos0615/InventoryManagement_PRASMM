@@ -18,24 +18,23 @@
 
     @if (TempData["success"] != null)
     {
-
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-solid-success alert-dismissible fade show">
             @TempData["success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
         </div>
     }
     @if (TempData["error"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-solid-danger alert-dismissible fade show">
             @TempData["error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
         </div>
     }
     <!-- /product list -->
-    <div class="card">
+    <div class="card" >
         <div class="card-body">
             <!-- /Filter -->
-            <div class="table-responsive">
+            <div class="table-responsive" >
                 <table id="datatableList" class="table mb-0">
                     <thead>
                         <tr>
