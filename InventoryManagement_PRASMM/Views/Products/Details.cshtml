@@ -12,7 +12,14 @@
 			<h6>@ViewBag.Caption</h6>
 		</div>
 	</div>
-	<!-- /add -->
+	<!-- /MESSAGES -->
+	@if (TempData["error"] != null)
+	{
+		<div class="alert alert-danger rounded-pill alert-dismissible fade show">
+			@TempData["error"]
+			<button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
+		</div>
+	}
 	<div class="card">
 		@using (Html.BeginForm("Save", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
 		{
@@ -80,7 +87,7 @@
 							<div class="col-lg-3 col-sm-6">
 								<div class="form-group">
 									<label>Price</label>
-									@Html.TextBoxFor(a => a.SRP, new { @class = "form-control", @required = "true" })
+									@Html.TextBoxFor(a => a.SRP, new { @class = "form-control", @required = "true", Value = String.Format("{0:0.00}", Model.SRP) })
 								</div>
 							</div>
 							<div class="col-lg-3 col-sm-6">
