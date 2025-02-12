@@ -19,25 +19,23 @@ namespace InventoryManagement_PRASMM.Controllers
             return Json(new { data = _list });
         }
 
-        public IActionResult Details(int id)
+        public ActionResult Details(int?id)
         {
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
             ProductCategory _details;
-
-
-
-            if (id == 0)
+            if (!id.HasValue)
             {
                 ViewBag.Caption = "Create new product Category";
                 _details = new ProductCategory();
+                return View(_details);
             }
             else
             {
+                int idValue = Convert.ToInt32(id);
                 ViewBag.Caption = "Edit product Category";
-                _details = Models.ProductCategory.GetById(id);
+                _details = Models.ProductCategory.GetById(idValue);
+                return View(_details);
             }
-
-            return View(_details);
-
         }
 
         public IActionResult Save(ProductCategory _details)

@@ -20,7 +20,7 @@ namespace InventoryManagement_PRASMM.Controllers
             List<ProductCategory> _list = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
             return Json(new { data = _list });
         }
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
             ProductCategory _details;
 
@@ -34,8 +34,9 @@ namespace InventoryManagement_PRASMM.Controllers
             }
             else
             {
+                int idValue = Convert.ToInt32(id);
                 ViewBag.Caption = "Edit product Category";
-                _details = Models.ProductCategory.GetById(id);
+                _details = Models.ProductCategory.GetById(idValue);
             }
 
             return View(_details);

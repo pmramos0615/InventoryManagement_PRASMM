@@ -26,6 +26,7 @@ namespace InventoryManagement_PRASMM.Controllers
         }
         public ActionResult List()
         {
+            
             int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
 
             var _list = Products.GetBySuscriptionId(subscriptionId);
