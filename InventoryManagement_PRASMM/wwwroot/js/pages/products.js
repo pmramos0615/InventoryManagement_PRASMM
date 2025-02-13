@@ -10,10 +10,12 @@
                 "data": "name",
                 "autoWidth": true,
                 "render": function (data, type, row) {
+                    const filename = row.fileName ? row.fileName : '1_33_images.jpg';
                     return `<div style="display: flex; align-items: center;">
-                    <img src="${row.imageURL}" alt="" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
-                    <span>${data}</span>
+                    <img src="/Uploads/Products/${filename}" alt="" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; object-fit:cover">
+                    <span>${row.name}</span>
                 </div>`;
+                   /* <img src="${row.imageURL}" alt="" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">*/
                 }
             },
             { "data": "sku", "autoWidth": true }, 
@@ -36,28 +38,65 @@
     oTable = $('#datatableList').DataTable();
 });
 
-$("#btnDelete").click(function () {
+//$("#btnDelete").click(function () {
+//    var id = $("#ID").val();
+//    Swal.fire({
+//        title: "Are you sure?",
+//        text: "You want to delete this product record!",
+//        type: "warning",
+//        showCancelButton: !0,
+//        confirmButtonColor: "#3085d6",
+//        cancelButtonColor: "#d33",
+//        confirmButtonText: "Yes, delete it!",
+//        confirmButtonClass: "btn btn-primary",
+//        cancelButtonClass: "btn btn-danger ml-1",
+//        buttonsStyling: !1,
+//    }).then(function (t) {
+//        (function (t) {
+//            if (t.value) {
+//                Delete(id);
+//                Swal.fire({
+//                    type: "success",
+//                    title: "Deleted!",
+//                    text: "Your product record has been deleted.",
+//                    confirmButtonClass: "btn btn-success",
+//                });
+//            }
+//        })
+//    });
+//});
+$("#btnDelete").on("click", function () {
     var id = $("#ID").val();
     Swal.fire({
         title: "Are you sure?",
-        text: "You want to delete this product record!",
-        type: "warning",
-        showCancelButton: !0,
+        text: "You won't be able to revert this!",
+        icon: "warning",  // Use 'icon' instead of 'type'
+        showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!",
-        confirmButtonClass: "btn btn-primary",
-        cancelButtonClass: "btn btn-danger ml-1",
-        buttonsStyling: !1,
-    }).then(function (t) {
-        Delete(id);
-        t.value &&
+        customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger ml-1"
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {  
             Swal.fire({
-                type: "success",
+                icon: "success",
                 title: "Deleted!",
-                text: "Your product record has been deleted.",
-                confirmButtonClass: "btn btn-success",
+                text: "Your file has been deleted.",
+                confirmButtonColor: "#3085d6",
+                customClass: {
+                    confirmButton: "btn btn-success"
+                }
+            }).then(() => {
+                if (result.isConfirmed) { 
+                    Delete(id);
+                    window.location.href = "/Products";
+                }
+                
             });
+        }
     });
 });
 

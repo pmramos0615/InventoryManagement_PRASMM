@@ -19,25 +19,23 @@ namespace InventoryManagement_PRASMM.Controllers
             return Json(new { data = _list });
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
             Brands _details;
-
-
-
-            if (id == 0)
+            if (!id.HasValue)
             {
                 ViewBag.Caption = "Create new Brand";
                 _details = new Brands();
+                return View(_details);
             }
             else
             {
+                int idValue = Convert.ToInt32(id);
                 ViewBag.Caption = "Edit Brand";
-                _details = Models.Brands.GetById(id);
+                _details = Models.Brands.GetById(idValue);
+                return View(_details);
             }
-
-            return View(_details);
-
         }
 
         public ActionResult Save(Brands _details)
@@ -64,10 +62,8 @@ namespace InventoryManagement_PRASMM.Controllers
                     _transaction.ModifiedBy = Convert.ToInt32(userId);
                     msg = "Record updated successfully!";
                 }
-
                 _transaction.Name = _details.Name;
                 _transaction.Description = _details.Description;
-
 
                 if (_transaction.Save())
                 {

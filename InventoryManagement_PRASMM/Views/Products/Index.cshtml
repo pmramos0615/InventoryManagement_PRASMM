@@ -2,7 +2,6 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="content">
     <div class="page-header">
         <div class="page-title">
@@ -10,24 +9,25 @@
             <h6>Manage your products</h6>
         </div>
         <div class="page-btn">
-            <a href="@Url.Action("Details", "Products", new { id="0"})" class="btn btn-added">
-                <img src="img/icons/plus.svg" class="me-1" alt="img">Add  New Product
+            <a href="@Url.Action("Details")" class="btn btn-added">
+                <img src="img/icons/plus.svg" class="me-1" alt="img">
+                Add  New Product
             </a>
         </div>
     </div>
 
     @if (TempData["success"] != null)
     {
-        <div class="alert alert-solid-success alert-dismissible fade show">
+        <div class="alert alert-success rounded-pill alert-dismissible fade show">
             @TempData["success"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
         </div>
     }
     @if (TempData["error"] != null)
     {
-        <div class="alert alert-solid-danger alert-dismissible fade show">
+        <div class="alert alert-danger rounded-pill alert-dismissible fade show">
             @TempData["error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
+            <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
         </div>
     }
     <!-- /product list -->
