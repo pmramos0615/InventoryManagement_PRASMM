@@ -3,25 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement_PRASMM.Controllers
 {
-    public class PurchaseOrder : Controller
+    public class PurchaseOrderController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
             int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
 
             ViewBag.Suppliers = Suppliers.GetBySubscriptionID(subscriptionId);
 
+            var model = new PurchaseOrderHeader.PurchaseOrderHeaderSearch();
+
             DateTime now = DateTime.Now;
             var startDate = new DateTime(now.Year, now.Month, 1);
             var endDate = startDate.AddMonths(1).AddDays(-1);
 
-            var model = new PurchaseOrderHeader();
             model.DateFrom = startDate;
             model.DateTo = endDate;
 
             return View(model);
         }
-        public IActionResult List()
+        public ActionResult List()
         {
             int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
 
@@ -78,6 +79,30 @@ namespace InventoryManagement_PRASMM.Controllers
             var data = _list;
             return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
 
+        }
+        public ActionResult Details(int? id) 
+        {
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+            PurchaseOrderHeader _details;
+            if (!id.HasValue)     /* <--------------------- This is the Add or Create, the url will be like  hostaddress.com/Details */
+            {
+                ViewBag.Caption = "Create new product";
+
+                _details = new PurchaseOrderHeader();
+
+                return View(_details);
+            }
+            else        /* <------------------ This is the  Edit, the url will be like  hostaddress.com/Details/encryptedValue (in the future for now just id)*/
+            {
+                ViewBag.Caption = "Edit product";
+
+                int idValue = Convert.ToInt32(id);
+                _details = Models.PurchaseOrderHeader.GetById(idValue);
+
+
+                return View(_details);
+            }
+            return View();
         }
     }
 }

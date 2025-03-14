@@ -43,13 +43,13 @@ namespace InventoryManagement_PRASMM.Data
                 item.ID = _reader.GetInt32(0);
                 item.PONo = _reader.GetString(1);
                 item.PODate = _reader.GetDateTime(2);
-                item.OrderStatus = _reader.GetString(3);
-                item.PaymentStatus = _reader.GetString(4);
-                item.SupplierName = _reader.GetString(5);
-                item.GrandTotal = _reader.GetDecimal(6);
-                item.Paid = _reader.GetDecimal(7);
-                item.Due = _reader.GetDecimal(8);
-                list.Add(item);
+                //item.OrderStatus = _reader.GetString(3);
+                //item.PaymentStatus = _reader.GetString(4);
+                //item.SupplierName = _reader.GetString(5);
+                //item.GrandTotal = _reader.GetDecimal(6);
+                //item.Paid = _reader.GetDecimal(7);
+                //item.Due = _reader.GetDecimal(8);
+                //list.Add(item);
             }
 
             _reader.Close();

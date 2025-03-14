@@ -2,12 +2,51 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
+using InventoryManagement_PRASMM.Models;
 using InventoryManagement_PRASMM.Data;
 
 namespace InventoryManagement_PRASMM.Models
 {
     public class PurchaseOrderHeader
     {
+        public class PurchaseOrderHeaderSearch {
+            public string PONo { get; set; }
+            public string OrderStatusID { get; set; }
+            public DateTime DateFrom { get; set; }
+            public DateTime DateTo { get; set; }
+
+            public int SupplierId { get; set; }
+        }
+        #region Properties
+        public int ID { get; set; }
+        public int StoreID { get; set; }
+        public int SubscriptionID { get; set; }
+        public string PONo { get; set; }
+        public int POStatusID { get; set; }
+        public string POStatusName { get; set; }
+        public DateTime PODate { get; set; }
+        public int SupplierID { get; set; }
+        public string SupplierName { get; set; }
+        public string SupplierAddress { get; set; }
+        public int SuppliersTermsID { get; set; }
+        public string SuppliersTermsName { get; set; }
+        public string Remarks { get; set; }
+        public int Discontinued { get; set; }
+        public int DiscontinuedBy { get; set; }
+        public DateTime DateDiscontinued { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int ModifiedBy { get; set; }
+        public DateTime DateModified { get; set; }
+        public int isVoid { get; set; }
+        public int isVoidBy { get; set; }
+        public DateTime isVoidDate { get; set; }
+
+        //public List<PurchaseOrderDetails> _PODetails { get; set; }
+        public string PODateStr {
+            get { return this.PODate.ToString("MM/dd/yyyy"); }
+        }
+        #endregion
 
         #region CONSTRUCTOR
         public PurchaseOrderHeader()
@@ -19,14 +58,14 @@ namespace InventoryManagement_PRASMM.Models
         {
             this.ID = 0;
             this.StoreID = 0;
+            this.SubscriptionID = 0;
             this.PONo = "";
             this.PODate = DateTime.Now;
-            this.OrderStatusID = 0;
-            this.PaymentStatusID = 0;
             this.SupplierID = 0;
-            this.DeliveryAddress = "";
-            this.TermsID = 0;
-            this.ExpectedDate = DateTime.Now;
+            this.SupplierName = "";
+            this.SupplierAddress = "";
+            this.SuppliersTermsID = 0;
+            this.SuppliersTermsName = "";
             this.Remarks = "";
             this.Discontinued = 0;
             this.DiscontinuedBy = 0;
@@ -35,40 +74,9 @@ namespace InventoryManagement_PRASMM.Models
             this.DateCreated = DateTime.Now;
             this.ModifiedBy = 0;
             this.DateModified = DateTime.Now;
-            this.DateFrom = DateTime.Now;
-            this.DateTo = DateTime.Now;
-
-        }
-        #endregion
-        #region Properties
-        public int ID { get; set; }
-        public int StoreID { get; set; }
-        public string PONo { get; set; }
-        public DateTime PODate { get; set; }
-        public int OrderStatusID { get; set; }
-        public int PaymentStatusID { get; set; }
-        public int SupplierID { get; set; }
-        public string DeliveryAddress { get; set; }
-        public int TermsID { get; set; }
-        public DateTime ExpectedDate { get; set; }
-        public string Remarks { get; set; }
-        public int Discontinued { get; set; }
-        public int DiscontinuedBy { get; set; }
-        public DateTime DateDiscontinued { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime DateModified { get; set; }
-        public string OrderStatus { get; internal set; }
-        public string PaymentStatus { get; internal set; }
-        public string SupplierName { get; internal set; }
-        public decimal GrandTotal { get; internal set; }
-        public decimal Paid { get; internal set; }
-        public decimal Due { get; internal set; }
-        public DateTime DateFrom { get;  set; }
-        public DateTime DateTo { get;  set; }
-        public string PODateStr {
-            get { return this.PODate.ToString("MM/dd/yyyy"); }
+            this.isVoidBy = 0;
+            this.isVoid = 0;
+            this.isVoidDate = DateTime.Now;
         }
         #endregion
 
@@ -105,7 +113,7 @@ namespace InventoryManagement_PRASMM.Models
             {
                 this.ID = Convert.ToInt32(row["ID"]);
                 this.PONo = Convert.ToString(row["PONo"]);
-                this.DeliveryAddress = Convert.ToString(row["DeliveryAddress"]);
+                //this.DeliveryAddress = Convert.ToString(row["DeliveryAddress"]);
                 this.Remarks = Convert.ToString(row["Remarks"]);
                 this.Discontinued = Convert.ToInt32(row["Discontinued"]);
                 this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
@@ -114,16 +122,16 @@ namespace InventoryManagement_PRASMM.Models
                     this.StoreID = Convert.ToInt32(row["StoreID"]);
                 if (!DBNull.Value.Equals(row["PODate"]))
                     this.PODate = Convert.ToDateTime(row["PODate"]);
-                if (!DBNull.Value.Equals(row["OrderStatusID"]))
-                    this.OrderStatusID = Convert.ToInt32(row["OrderStatusID"]);
-                if (!DBNull.Value.Equals(row["PaymentStatusID"]))
-                    this.PaymentStatusID = Convert.ToInt32(row["PaymentStatusID"]);
+                //if (!DBNull.Value.Equals(row["OrderStatusID"]))
+                //    this.OrderStatusID = Convert.ToInt32(row["OrderStatusID"]);
+                //if (!DBNull.Value.Equals(row["PaymentStatusID"]))
+                //    this.PaymentStatusID = Convert.ToInt32(row["PaymentStatusID"]);
                 if (!DBNull.Value.Equals(row["SupplierID"]))
                     this.SupplierID = Convert.ToInt32(row["SupplierID"]);
-                if (!DBNull.Value.Equals(row["TermsID"]))
-                    this.TermsID = Convert.ToInt32(row["TermsID"]);
-                if (!DBNull.Value.Equals(row["ExpectedDate"]))
-                    this.ExpectedDate = Convert.ToDateTime(row["ExpectedDate"]);
+                //if (!DBNull.Value.Equals(row["TermsID"]))
+                //    this.TermsID = Convert.ToInt32(row["TermsID"]);
+                //if (!DBNull.Value.Equals(row["ExpectedDate"]))
+                //    this.ExpectedDate = Convert.ToDateTime(row["ExpectedDate"]);
                 if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
                     this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
                 if (!DBNull.Value.Equals(row["DateDiscontinued"]))
@@ -142,10 +150,11 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new PurchaseOrderHeaderDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID, this.StoreID, this.PONo, this.PODate, this.OrderStatusID, this.PaymentStatusID, this.SupplierID, this.DeliveryAddress, this.TermsID, this.ExpectedDate, this.Remarks, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            //int ret = dal.Save(this.ID, this.StoreID, this.PONo, this.PODate, this.OrderStatusID, this.PaymentStatusID, this.SupplierID, this.DeliveryAddress, this.TermsID, this.ExpectedDate, this.Remarks, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
 
-            this.ID = ret;
-            return (ret > 0);
+            //this.ID = ret;
+            //return (ret > 0);
+            return true; 
         }
         public static bool Delete(int id, int discontinuedby)
         {

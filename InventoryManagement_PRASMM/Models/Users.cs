@@ -1,4 +1,5 @@
 ﻿using InventoryManagement_PRASMM.Data;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace InventoryManagement_PRASMM.Models
@@ -41,12 +42,19 @@ namespace InventoryManagement_PRASMM.Models
         #region Properties
         public int ID { get; set; }
         public int SubscriptionID { get; set; }
+        public string Subscriber { get; set; }
+        public int DepartmentID { get; set; }
+        public string Department { get; set; }
+        public int UserRoleID { get; set; }
+        public string UserRole { get; set; }
+
+        [Display(Name = "Username")]
         public string UserName { get; set; }
+        [Display(Name = "Password")]
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string MI { get; set; }
         public string LastName { get; set; }
-        public int DepartmentID { get; set; }
         public string ContactNo { get; set; }
         public string EmailAddress { get; set; }
         public string Address1 { get; set; }
@@ -62,17 +70,79 @@ namespace InventoryManagement_PRASMM.Models
         public DateTime DateModified { get; set; }
 
         public string FullName {
-            get { return string.Format("{0} {1}", this.FirstName, this.LastName); }
+            get { return string.Format("{2} {1}. {0}", this.LastName,this.MI, this.FirstName); }
         }
-
+        public string FullnameFormalFormat 
+        { 
+            get 
+            {
+                return string.Format("{0}, {2} {1}.", this.LastName, this.MI, this.FirstName);
+            }
+        }
         #endregion
+        public void Bind(DataRow row)
+        {
+            if (row != null)
+            {
+                this.ID = Convert.ToInt32(row["ID"]);
+                this.UserName = Convert.ToString(row["UserName"]);
+                this.Discontinued = Convert.ToInt32(row["Discontinued"]);
+                this.DateCreated = Convert.ToDateTime(row["CreatedDate"]);
 
+                if (!DBNull.Value.Equals(row["SubscriptionID"]))
+                    this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
+                if (!DBNull.Value.Equals(row["Password"]))
+                    this.Password = Convert.ToString(row["Password"]);
+                if (!DBNull.Value.Equals(row["FirstName"]))
+                    this.FirstName = Convert.ToString(row["FirstName"]);
+                if (!DBNull.Value.Equals(row["MI"]))
+                    this.MI = Convert.ToString(row["MI"]);
+                if (!DBNull.Value.Equals(row["LastName"]))
+                    this.LastName = Convert.ToString(row["LastName"]);
+                if (!DBNull.Value.Equals(row["DepartmentID"]))
+                    this.DepartmentID = Convert.ToInt32(row["DepartmentID"]);
+                if (!DBNull.Value.Equals(row["ContactNo"]))
+                    this.ContactNo = Convert.ToString(row["ContactNo"]);
+                if (!DBNull.Value.Equals(row["EmailAddress"]))
+                    this.EmailAddress = Convert.ToString(row["EmailAddress"]);
+                if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
+                    this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
+                if (!DBNull.Value.Equals(row["DiscontinuedDate"]))
+                    this.DateDiscontinued = Convert.ToDateTime(row["DiscontinuedDate"]);
+                if (!DBNull.Value.Equals(row["CreatedBy"]))
+                    this.CreatedBy = Convert.ToInt32(row["CreatedBy"]);
+                if (!DBNull.Value.Equals(row["ModifiedBy"]))
+                    this.ModifiedBy = Convert.ToInt32(row["ModifiedBy"]);
+                if (!DBNull.Value.Equals(row["ModifiedDate"]))
+                    this.DateModified = Convert.ToDateTime(row["ModifiedDate"]);
+            }
+        }
+        public void BindUserDescription(DataRow row) 
+        {
+            if (row != null) 
+            {
+                this.ID = Convert.ToInt32(row["ID"]);
+                if (!DBNull.Value.Equals(row["Department"]))
+                this.Department = Convert.ToString(row["Department"]);
+                if (!DBNull.Value.Equals(row["Subscriber"]))
+                this.Subscriber = Convert.ToString(row["Subscriber"]);
+                if (!DBNull.Value.Equals(row["UserRole"]))
+                this.UserRole = Convert.ToString(row["UserRole"]);
+            }
+        }
         #region Public Methods
         public static Users GetById(int id)
         {
             var dal = new UsersDAL();
             var instance = new Users();
             instance.Bind(dal.GetById(id));
+            return instance;
+        }
+        public static Users GetUserDescriptionByLogin(string username, string password) 
+        {
+            var dal = new UsersDAL();
+            var instance = new Users();
+            instance.BindUserDescription(dal.GetUserDescriptionByLogin(username, password));
             return instance;
         }
         public static List<Users> GetAll()
@@ -99,52 +169,6 @@ namespace InventoryManagement_PRASMM.Models
             }
             return collection;
         }
-        public void Bind(DataRow row)
-        {
-            if (row != null)
-            {
-                this.ID = Convert.ToInt32(row["ID"]);
-                this.UserName = Convert.ToString(row["UserName"]);
-                this.Discontinued = Convert.ToInt32(row["Discontinued"]);
-                this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
-
-                if (!DBNull.Value.Equals(row["SubscriptionID"]))
-                    this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
-                if (!DBNull.Value.Equals(row["Password"]))
-                    this.Password = Convert.ToString(row["Password"]);
-                if (!DBNull.Value.Equals(row["FirstName"]))
-                    this.FirstName = Convert.ToString(row["FirstName"]);
-                if (!DBNull.Value.Equals(row["MI"]))
-                    this.MI = Convert.ToString(row["MI"]);
-                if (!DBNull.Value.Equals(row["LastName"]))
-                    this.LastName = Convert.ToString(row["LastName"]);
-                if (!DBNull.Value.Equals(row["DepartmentID"]))
-                    this.DepartmentID = Convert.ToInt32(row["DepartmentID"]);
-                if (!DBNull.Value.Equals(row["ContactNo"]))
-                    this.ContactNo = Convert.ToString(row["ContactNo"]);
-                if (!DBNull.Value.Equals(row["EmailAddress"]))
-                    this.EmailAddress = Convert.ToString(row["EmailAddress"]);
-                if (!DBNull.Value.Equals(row["Address1"]))
-                    this.Address1 = Convert.ToString(row["Address1"]);
-                if (!DBNull.Value.Equals(row["Address2"]))
-                    this.Address2 = Convert.ToString(row["Address2"]);
-                if (!DBNull.Value.Equals(row["Address3"]))
-                    this.Address3 = Convert.ToString(row["Address3"]);
-                if (!DBNull.Value.Equals(row["Address4"]))
-                    this.Address4 = Convert.ToString(row["Address4"]);
-                if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
-                    this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
-                if (!DBNull.Value.Equals(row["DateDiscontinued"]))
-                    this.DateDiscontinued = Convert.ToDateTime(row["DateDiscontinued"]);
-                if (!DBNull.Value.Equals(row["CreatedBy"]))
-                    this.CreatedBy = Convert.ToInt32(row["CreatedBy"]);
-                if (!DBNull.Value.Equals(row["ModifiedBy"]))
-                    this.ModifiedBy = Convert.ToInt32(row["ModifiedBy"]);
-                if (!DBNull.Value.Equals(row["DateModified"]))
-                    this.DateModified = Convert.ToDateTime(row["DateModified"]);
-
-            }
-        }
         public bool Save()
         {
             var dal = new UsersDAL();
@@ -154,6 +178,19 @@ namespace InventoryManagement_PRASMM.Models
 
             this.ID = ret;
             return (ret > 0);
+        }
+        public static Users GetUserByLogin(string username, string password)
+        {
+            var dal = new UsersDAL();
+            var instance = new Users();
+            instance.Bind(dal.GetUserByLogin(username, password));
+            return instance;
+        }
+        public static bool Login(string username,string password)
+        {
+            var dal = new UsersDAL();
+            bool ra = dal.Login(username, password);
+            return ra;
         }
         public static bool Delete(int id, int discontinuedby)
         {

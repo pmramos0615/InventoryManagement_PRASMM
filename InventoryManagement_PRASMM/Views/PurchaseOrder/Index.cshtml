@@ -1,8 +1,8 @@
-﻿@model InventoryManagement_PRASMM.Models.PurchaseOrderHeader
+﻿@model InventoryManagement_PRASMM.Models.PurchaseOrderHeader.PurchaseOrderHeaderSearch
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml"; ;
 }
 
 <div class="content">
@@ -12,7 +12,7 @@
             <h6>Manage your purchases</h6>
         </div>
         <div class="page-btn">
-            <a href="@Url.Action("Details", "PurchaseOrder", new { id="0"})" class="btn btn-added">
+            <a href="@Url.Action("Details", "PurchaseOrder")" class="btn btn-added">
                 <img src="img/icons/plus.svg" class="me-1" alt="img">Add  New Purchases
             </a>
         </div>
@@ -43,7 +43,7 @@
                         <div class="row">
                             <div class="col-lg col-sm-6 col-12">
                                 <div class="form-group">
-                                    @Html.DropDownListFor(a => a.SupplierID, new SelectList(ViewBag.Suppliers, "ID", "Name"), "All Suppliers", new { @class = "form-control select2 select2-container select2-container--default ", @required = "true", @style = "width:100%",@id="SupplierName" })
+                                    @Html.DropDownListFor(a => a.SupplierId, new SelectList(ViewBag.Suppliers, "ID", "Name"), "All Suppliers", new { @class = "form-control select2 select2-container select2-container--default ", @required = "true", @style = "width:100%",@id="SupplierName" })
                                 </div>
                             </div>
                             <div class="col-lg col-sm-6 col-12">
@@ -73,14 +73,13 @@
                 <table id="datatableList" class="table mb-0">
                     <thead>
                         <tr>
+                            <th>PO Number</th>
+                            <th>Order Status</th>
+                            <th>Payment Status</th>
                             <th>Supplier Name</th>
-                            <th>Po Number</th>
                             <th>Date</th>
                             <th>Status</th>
-                            <th>Grand Total</th>
-                            <th>Paid</th>
-                            <th>Due</th>
-                            <th>Payment Status</th>
+                            <th>Expected Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
