@@ -1,4 +1,5 @@
-﻿<div class="header header-one">
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<div class="header header-one">
 
     <!-- Logo -->
     <div class="header-left active">
@@ -173,8 +174,8 @@
                         <img src="~/img/profiles/avator1.jpg" alt="" class="img-fluid">
                     </span>
                     <span class="user-detail">
-                        <span class="user-name">John Smilga</span>
-                        <span class="user-role">Super Admin</span>
+                        <h6>@HttpContextAccessor.HttpContext.Session.GetString("Fullname")</h6>
+                        <h5>@HttpContextAccessor.HttpContext.Session.GetString("Department")&nbsp;-&nbsp;@HttpContextAccessor.HttpContext.Session.GetString("UserRole")</h5>
                     </span>
                 </span>
             </a>
@@ -186,8 +187,8 @@
                             <span class="status online"></span>
                         </span>
                         <div class="profilesets">
-                            <h6>John Smilga</h6>
-                            <h5>Super Admin</h5>
+                            <h6>@HttpContextAccessor.HttpContext.Session.GetString("Fullname")</h6>
+                            <h5>@HttpContextAccessor.HttpContext.Session.GetString("Department")&nbsp;-&nbsp;@HttpContextAccessor.HttpContext.Session.GetString("UserRole")</h5>
                         </div>
                     </div>
                     <hr class="m-0">

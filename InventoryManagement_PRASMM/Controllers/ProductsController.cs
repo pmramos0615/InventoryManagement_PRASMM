@@ -18,6 +18,7 @@ namespace InventoryManagement_PRASMM.Controllers
             ViewBag.Brand = Brands.GetBySubscription(subscriptionId);
             ViewBag.Unit = Units.GetAll();
             ViewBag.Discount = DiscountRate.GetAll();
+            ViewBag.TaxTypes = TaxType.GetAll(subscriptionId);
             ViewBag.Status = ReferenceLookUp.GetByFilter("Product Status");
         }
         public ActionResult Index()
@@ -38,7 +39,7 @@ namespace InventoryManagement_PRASMM.Controllers
             int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
             ViewsViewbag(subscriptionId);
             Products _details;
-            if (!id.HasValue)     /* <--------------------- This is the Add or Create, the url will be like  hostaddress.com/Details */
+            if (!id.HasValue && id==0)     /* <--------------------- This is the Add or Create, the url will be like  hostaddress.com/Details */
             {
                 ViewBag.Caption = "Create new product";
 

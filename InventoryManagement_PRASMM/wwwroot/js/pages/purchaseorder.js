@@ -80,4 +80,7 @@
             }
         });
     }
+
+    //THIS IS A TEST OVERRIDE THE CONSOLE.LOG of the  browser
+    console.log = function () { };
 });

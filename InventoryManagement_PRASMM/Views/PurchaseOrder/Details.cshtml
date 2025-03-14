@@ -1,0 +1,72 @@
+﻿@model InventoryManagement_PRASMM.Models.PurchaseOrderHeader
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml"; ;
+}
+
+<div class="content">
+    <div class="page-header">
+        <div class="page-header">
+            <div class="page-title">
+                <h4>Purchase Order</h4>
+                <h6>@ViewBag.Caption</h6>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="col-sm-12">
+                <div class="row">
+
+					<div class="col-4">
+						<div class="form-group">
+							<label class="form-label">Purchase Number</label>
+							@Html.TextBoxFor(a => a.PONo, new { @class = "form-control form-control-sm",@disabled = "true"})
+						</div>
+					</div>
+
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="form-label">Purchase Status</label>
+                            @Html.TextBoxFor(a => a.PONo, new { @class = "form-control form-control-sm", @disabled = "true" })
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="form-label">Purchase Date</label>
+                            @Html.TextBoxFor(a => a.PODateStr, new { @class = "form-control form-control-sm", @type = "date", @style = "height:40px;" })
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="form-label">Supplier's Name</label>
+                            @Html.TextBoxFor(a => a.PONo, new { @class = "form-control form-control-sm" })
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="form-label">Supplier's Address</label>
+                            @Html.TextBoxFor(a => a.PONo, new { @class = "form-control form-control-sm" })
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="form-label">Supplier's Terms</label>
+                            @Html.TextBoxFor(a => a.PONo, new { @class = "form-control form-control-sm" })
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        @Html.TextAreaFor(a => a.Remarks, new{ @class = "form-control form-control-sm" ,@style="height:75px;"})
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

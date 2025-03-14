@@ -27,7 +27,37 @@ namespace InventoryManagement_PRASMM.Data
             base.com.Parameters.AddWithValue("@id", id);
             return base.GetFirstRow();
         }
+        public DataRow GetUserDescriptionByLogin(string username, string password) 
+        {
+            base.com.CommandText = "spUsersGetDescription";
+            base.com.Parameters.AddWithValue("@username", username);
+            base.com.Parameters.AddWithValue("@password", password);
+            return base.GetFirstRow();
+        }
+        public DataRow GetUserByLogin(string username, string password) 
+        {
+            base.com.CommandText = "spUsersGetByLogin";
+            base.com.Parameters.AddWithValue("@username", username);
+            base.com.Parameters.AddWithValue("@password", password);
+            return base.GetFirstRow();
+        }
 
+        public bool Login(string username, string password)
+        {
+            base.com.CommandText = "spLogin";
+            base.com.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username)?"":username);
+            base.com.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password)?"":password);
+            int ra;
+            try
+            {
+                ra = Convert.ToInt32(base.com.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ra > 0;
+        }
         public int Save(int id, int subscriptionid, string username, string password, string firstname, string mi, string lastname, int departmentid, string contactno, string emailaddress, string address1, string address2, string address3, string address4, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
         {
             message = "";
