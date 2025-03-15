@@ -18,11 +18,12 @@ namespace InventoryManagement_PRASMM.Data
 
         }
         
-        public List<PurchaseOrderHeader> GetBySubscriptionID(int storeId,int supplierId, string pono, DateTime datefrom, DateTime dateto, out int item_count, int curr_pageNumber, int page_size)
+        public List<PurchaseOrderHeader> GetBySubscriptionID(int subscriptionId, int storeId,int supplierId, string pono, DateTime datefrom, DateTime dateto, out int item_count, int curr_pageNumber, int page_size)
         {
             SqlParameter param_out = new SqlParameter("@itemcount", SqlDbType.Int, 4);
 
             base.com.CommandText = "spPurchaseOrderHeaderByStoreID";
+            base.com.Parameters.AddWithValue("@subscriptionId", subscriptionId);
             base.com.Parameters.AddWithValue("@storeId", storeId);
             base.com.Parameters.AddWithValue("@supplierId", supplierId);
             base.com.Parameters.AddWithValue("@pono", pono);

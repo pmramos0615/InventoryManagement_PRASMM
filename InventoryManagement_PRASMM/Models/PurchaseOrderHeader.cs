@@ -94,10 +94,10 @@ namespace InventoryManagement_PRASMM.Models
         }
 
         
-        public static List<PurchaseOrderHeader> GetBySubscriptionID(int storeId, int supplierId, string pono, DateTime datefrom, DateTime dateto, out int item_count, int curr_pageNumber, int page_size)
+        public static List<PurchaseOrderHeader> GetBySubscriptionID(int subscriptionId, int storeId, int supplierId, string pono, DateTime datefrom, DateTime dateto, out int item_count, int curr_pageNumber, int page_size)
         {
             var dal = new PurchaseOrderHeaderDAL();
-            return dal.GetBySubscriptionID(storeId, supplierId, pono, datefrom, dateto, out item_count, curr_pageNumber, page_size);
+            return dal.GetBySubscriptionID(subscriptionId, storeId, supplierId, pono, datefrom, dateto, out item_count, curr_pageNumber, page_size);
         }
         public void Bind(DataRow row)
         {

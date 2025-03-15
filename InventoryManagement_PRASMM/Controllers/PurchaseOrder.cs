@@ -24,7 +24,7 @@ namespace InventoryManagement_PRASMM.Controllers
         public IActionResult List()
         {
             int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
-
+            int storeId = Convert.ToInt32(HttpContext.Session.GetInt32("StoreID"));
             //jQuery DataTables Param
             var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
             //Find paging info
@@ -71,7 +71,7 @@ namespace InventoryManagement_PRASMM.Controllers
                 dateto = Convert.ToDateTime(filterdateto);
             }
 
-            List<PurchaseOrderHeader> _list = PurchaseOrderHeader.GetBySubscriptionID(subscriptionId, supplierId, pono, datefrom, dateto, out item_count, currentpage, pageSize);
+            List<PurchaseOrderHeader> _list = PurchaseOrderHeader.GetBySubscriptionID(subscriptionId, storeId, supplierId, pono, datefrom, dateto, out item_count, currentpage, pageSize);
 
             recordsTotal = item_count;
 
