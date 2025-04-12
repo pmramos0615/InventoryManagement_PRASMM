@@ -20,7 +20,20 @@ namespace InventoryManagement_PRASMM.Data
             base.com.Parameters.AddWithValue("@id", id);
             return base.GetFirstRow();
         }
-
+        public DataTable GetAllBySubscriptionID(int subscriptionid) 
+        {
+            base.com.CommandText = "spUnitsBySubscriptionID";
+            base.com.Parameters.AddWithValue("@subscriptionid", subscriptionid);
+            base.com.Parameters.AddWithValue("@id", 0);
+            return base.GetDataTable();
+        }
+        public DataRow GetBySubscriptionID(int subscriptionid,int id) 
+        {
+            base.com.CommandText = "spUnitsBySubscriptionID";
+            base.com.Parameters.AddWithValue("@subscriptionid", subscriptionid);
+            base.com.Parameters.AddWithValue("@id", id);
+            return base.GetFirstRow();
+        }
         public int Save(int id, string name, int discontinued, int discontinuedby, DateTime datediscontinued, int createdby, DateTime datecreated, int modifiedby, DateTime datemodified, out string message)
         {
             message = "";

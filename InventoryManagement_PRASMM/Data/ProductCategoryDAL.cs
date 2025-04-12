@@ -21,15 +21,6 @@ namespace InventoryManagement_PRASMM.Data
             return base.GetDataTable();
 
         }
-
-        
-        public DataTable GetSubCategoryBySubscription(int subscriptionId)
-        {
-            base.com.CommandText = "spProductSubCategoryBySubscriptionID";
-            base.com.Parameters.AddWithValue("@subscriptionId", subscriptionId);
-            return base.GetDataTable();
-
-        }
         public DataRow GetById(int id)
         {
             base.com.CommandText = "spProductCategory";

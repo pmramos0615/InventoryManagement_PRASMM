@@ -7,7 +7,7 @@ namespace InventoryManagement_PRASMM.Models
     {
         public int Id { get; set; }
         public int SubscriptionID { get; set; }
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public int ModifiedBy { get; set; }
@@ -32,7 +32,7 @@ namespace InventoryManagement_PRASMM.Models
 
         public TaxType()
         {
-            init();
+            this.init();
         }
 
         public void Bind(DataRow row)
@@ -40,15 +40,25 @@ namespace InventoryManagement_PRASMM.Models
             if (row != null)
             {
                 this.Id = Convert.ToInt32(row["ID"]);
-                this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
-                this.Description = row["Description"] != DBNull.Value ? Convert.ToString(row["Description"]) : string.Empty;
-                this.CreatedBy = row["CreatedBy"] != DBNull.Value ? Convert.ToInt32(row["CreatedBy"]) : 0;
-                this.CreatedDate = row["CreatedDate"] != DBNull.Value ? Convert.ToDateTime(row["CreatedDate"]) : DateTime.Now;
-                this.ModifiedBy = row["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(row["ModifiedBy"]) : 0;
-                this.ModifiedDate = row["ModifiedDate"] != DBNull.Value ? Convert.ToDateTime(row["ModifiedDate"]) : DateTime.Now;
-                this.Discontinued = row["Discontinued"] != DBNull.Value ? Convert.ToInt32(row["Discontinued"]) : 0;
-                this.DiscontinuedBy = row["DiscontinuedBy"] != DBNull.Value ? Convert.ToInt32(row["DiscontinuedBy"]) : 0;
-                this.DiscontinuedDate = row["DiscontinuedDate"] != DBNull.Value ? Convert.ToDateTime(row["DiscontinuedDate"]) : DateTime.Now;
+                if (!DBNull.Value.Equals(row["SubscriptionID"]))
+                    this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
+                if (!DBNull.Value.Equals(row["Description"]))
+                    this.Description = Convert.ToString(row["Description"]);
+                if (!DBNull.Value.Equals(row["CreatedBy"]))
+                    this.CreatedBy = Convert.ToInt32(row["CreatedBy"]);
+                if (!DBNull.Value.Equals(row["CreatedDate"]))
+                    this.CreatedDate = Convert.ToDateTime(row["CreatedDate"]);
+                if (!DBNull.Value.Equals(row["ModifiedBy"]))
+                    this.ModifiedBy = Convert.ToInt32(row["ModifiedBy"]);
+                if (!DBNull.Value.Equals(row["ModifiedDate"]))
+                    this.ModifiedDate = Convert.ToDateTime(row["ModifiedDate"]);
+                if (!DBNull.Value.Equals(row["Discontinued"]))
+                    this.Discontinued = Convert.ToInt32(row["Discontinued"]);
+                if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
+                    this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
+                if (!DBNull.Value.Equals(row["DiscontinuedDate"]))
+                    this.DiscontinuedDate = Convert.ToDateTime(row["DiscontinuedDate"]);
+
             }
         }
 
@@ -56,15 +66,12 @@ namespace InventoryManagement_PRASMM.Models
         {
             var dal = new TaxexTypeDAL();
             var collection = new List<TaxType>();
-            var dataTable = dal.GetAll(subscriptionid);
-            if (dataTable != null)
+
+            foreach(DataRow row in dal.GetAll(subscriptionid).Rows)
             {
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    var instance = new TaxType();
-                    instance.Bind(row);
-                    collection.Add(instance);
-                }
+                var instance = new TaxType();
+                instance.Bind(row);
+                collection.Add(instance);
             }
             return collection;
         }
@@ -73,11 +80,8 @@ namespace InventoryManagement_PRASMM.Models
         {
             var dal = new TaxexTypeDAL();
             var instance = new TaxType();
-            var dataRow = dal.GetByID(id, subscriptionid);
-            if (dataRow != null)
-            {
-                instance.Bind(dataRow);
-            }
+
+            instance.Bind(dal.GetByID(id,subscriptionid));
             return instance;
         }
     }
