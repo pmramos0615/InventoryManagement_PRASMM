@@ -14,12 +14,12 @@ namespace InventoryManagement_PRASMM.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult List()
-        {
-            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
-            List<ProductCategory> _list = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
-            return Json(new { data = _list });
-        }
+        //public ActionResult List()
+        //{
+        //    int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+        //    List<ProductCategory> _list = ProductCategory.GetSubCategoryBySubscription(subscriptionId);
+        //    return Json(new { data = _list });
+        //}
         public ActionResult Details(int? id)
         {
             ProductCategory _details;

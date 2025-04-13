@@ -83,18 +83,6 @@ namespace InventoryManagement_PRASMM.Models
             return collection;
         }
 
-        public static List<ProductCategory> GetSubCategoryBySubscription(int subscriptionId)
-        {
-            var dal = new ProductCategoryDAL();
-            var collection = new List<ProductCategory>();
-            foreach (DataRow row in dal.GetSubCategoryBySubscription(subscriptionId).Rows)
-            {
-                var instance = new ProductCategory();
-                instance.Bind(row);
-                collection.Add(instance);
-            }
-            return collection;
-        }
         public void Bind(DataRow row)
         {
             if (row != null)
@@ -102,14 +90,9 @@ namespace InventoryManagement_PRASMM.Models
                 this.ID = Convert.ToInt32(row["ID"]);
                 this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
 
-                if (!DBNull.Value.Equals(row["ParentID"]))
-                    this.ParentID = Convert.ToInt32(row["ParentID"]);
-                this.Name = Convert.ToString(row["Name"]);
-                this.Discontinued = Convert.ToInt32(row["Discontinued"]);
-                this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
 
-                if (!DBNull.Value.Equals(row["Code"]))
-                    this.Code = Convert.ToString(row["Code"]);
+                if (!DBNull.Value.Equals(row["Name"]))
+                    this.Name = Convert.ToString(row["Name"]);
                 if (!DBNull.Value.Equals(row["Description"]))
                     this.Description = Convert.ToString(row["Description"]);
                 if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
@@ -122,10 +105,6 @@ namespace InventoryManagement_PRASMM.Models
                     this.ModifiedBy = Convert.ToInt32(row["ModifiedBy"]);
                 if (!DBNull.Value.Equals(row["DateModified"]))
                     this.DateModified = Convert.ToDateTime(row["DateModified"]);
-                if (!DBNull.Value.Equals(row["ParentCategory"]))
-                    this.ParentCategory = Convert.ToString(row["ParentCategory"]);
-                
-
             }
         }
         public bool Save()

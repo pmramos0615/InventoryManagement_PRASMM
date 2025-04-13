@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\scss\" />
     <Folder Include="wwwroot\plugins\" />
     <Folder Include="wwwroot\Uploads\Products\" />

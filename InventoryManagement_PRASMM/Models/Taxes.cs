@@ -9,7 +9,7 @@ namespace InventoryManagement_PRASMM.Models
     {
         public int ID { get; set; }
         public int SubscriptionID { get; set; }
-        public int TaxType { get; set; }
+        public string TaxType { get; set; }
         public decimal Amount { get; set; }
         public string Description { get; set; }
         public int CreatedBy { get; set; }
@@ -24,7 +24,7 @@ namespace InventoryManagement_PRASMM.Models
         {
             this.ID = 0;
             this.SubscriptionID = 0;
-            this.TaxType = 0;  
+            this.TaxType = "";  
             this.Amount = 0;
             this.Description = string.Empty;
             this.CreatedBy = 0; 
@@ -36,7 +36,7 @@ namespace InventoryManagement_PRASMM.Models
             this.DiscontinuedBy = 0;
         }
         public Taxes() {
-            init();
+            this.init();
         }
 
         public void Bind (DataRow row) 
@@ -45,9 +45,10 @@ namespace InventoryManagement_PRASMM.Models
             {
                 this.ID = Convert.ToInt32(row["ID"]);
                 this.SubscriptionID = Convert.ToInt32(row["subscriptionId"]);
-                this.TaxType = Convert.ToInt32(row["TaxType"]);
-                if (!DBNull.Value.Equals(row["Amount"]))
-                    this.Amount = Convert.ToDecimal(row["Amount"]);
+                if (!DBNull.Value.Equals(row["TaxType"]))
+                this.TaxType = Convert.ToString(row["TaxType"]);
+                if (!DBNull.Value.Equals(row["TaxAmount"]))
+                    this.Amount = Convert.ToDecimal(row["TaxAmount"]);
                 if (!DBNull.Value.Equals(row["Description"]))
                     this.Description = Convert.ToString(row["Description"]);
                 if (!DBNull.Value.Equals(row["CreatedBy"]))
@@ -58,7 +59,7 @@ namespace InventoryManagement_PRASMM.Models
                     this.ModifiedBy = Convert.ToInt32(row["ModifiedBy"]);
                 if (!DBNull.Value.Equals(row["ModifiedDate"]))
                     this.ModifiedDate = Convert.ToDateTime(row["ModifiedDate"]);
-                if (!DBNull.Value.Equals(row["Discintuned"]))
+                if (!DBNull.Value.Equals(row["Discontinued"]))
                     this.Discontinued = Convert.ToInt32(row["Discontinued"]);
                 if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
                     this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
@@ -71,6 +72,18 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new TaxesDAL();
             var collection = new List<Taxes>();
             foreach (DataRow row in dal.GetAll(subscriptionid).Rows)
+            {
+                var instance = new Taxes();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
+        public static List<Taxes> GetByTaxTypeID(int taxtypeid, int subscriptionid)
+        {
+            var dal = new TaxesDAL();
+            var collection = new List<Taxes>();
+            foreach (DataRow row in dal.GetByTaxTypeID(taxtypeid, subscriptionid).Rows)
             {
                 var instance = new Taxes();
                 instance.Bind(row);

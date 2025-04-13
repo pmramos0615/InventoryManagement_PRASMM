@@ -21,11 +21,11 @@ namespace InventoryManagement_PRASMM.Models
             this.BrandID = 0;
             this.UnitID = 0;
             this.SKU = "";
+            this.BarCode = "";
             this.MinQty = 0;
             this.Qty = 0;
             this.Description = "";
             this.TaxID = 0;
-            this.DiscountRateID = 0;
             this.Cost = 0;
             this.MarkupRate = 0;
             this.SRP = 0;
@@ -42,6 +42,7 @@ namespace InventoryManagement_PRASMM.Models
             this.Unit=string.Empty;
             this.Brand = string.Empty;
             this.Category = string.Empty;
+            this.VariantTypeID = 0;
         }
         #endregion
         #region Properties
@@ -53,19 +54,27 @@ namespace InventoryManagement_PRASMM.Models
         public int SubCategoryID { get; set; }
         public string ?Subcategory{ get; set; }
         public int BrandID { get; set; }
+        public int StoreID { get; set; }
         public string Brand { get; set; }
         public int UnitID { get; set; }
+        public int ProductTypeID { get; set; }
+        public int VariantTypeID { get; set; }
+        public int VarianSpecifiedID { get; set; }
         public string SKU { get; set; }
+        public string BarCode { get; set; }
+        public string ItemCode { get; set; }
         public int MinQty { get; set; }
         public int Qty { get; set; }
         public string Description { get; set; }
         public int TaxID { get; set; }
-        public int DiscountRateID { get; set; }
+        public int TaxAmountID { get; set; }
         public decimal Cost { get; set; }
         public decimal MarkupRate { get; set; }
+        public decimal AcquiredCost { get; set; }
+        public decimal MarkupPrice { get; set; }
         public decimal SRP { get; set; }
         public int StatusID { get; set; }
-        public IFormFile Attachment { get; set; }
+        public IFormFile? Attachment { get; set; }
         public string ImageURL { get; set; }
         public int Discontinued { get; set; }
         public int DiscontinuedBy { get; set; }
@@ -121,12 +130,10 @@ namespace InventoryManagement_PRASMM.Models
             {
                 this.ID = Convert.ToInt32(row["ID"]);
                 this.SubscriptionID = Convert.ToInt32(row["SubscriptionID"]);
-                this.Name = Convert.ToString(row["Name"]);
-                this.Discontinued = Convert.ToInt32(row["Discontinued"]);
-                this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
-
-                if (!DBNull.Value.Equals(row["CategoryID"]))
-                    this.CategoryID = Convert.ToInt32(row["CategoryID"]);
+                if (!DBNull.Value.Equals(row["Name"]))
+                    this.Name = Convert.ToString(row["Name"]);
+                if (!DBNull.Value.Equals(row["SKU"]))
+                    this.SKU = Convert.ToString(row["SKU"]);
                 if (!DBNull.Value.Equals(row["Category"]))
                     this.Category = Convert.ToString(row["Category"]);
                 if (!DBNull.Value.Equals(row["SubCategoryID"]))
@@ -141,41 +148,48 @@ namespace InventoryManagement_PRASMM.Models
                     this.UnitID = Convert.ToInt32(row["UnitID"]);
                 if (!DBNull.Value.Equals(row["Unit"]))
                     this.Unit = Convert.ToString(row["Unit"]);
-                if (!DBNull.Value.Equals(row["SKU"]))
-                    this.SKU = Convert.ToString(row["SKU"]);
+                if (!DBNull.Value.Equals(row["BarCode"]))
+                    this.BarCode = Convert.ToString(row["BarCode"]);
+                if (!DBNull.Value.Equals(row["ItemCode"]))
+                    this.ItemCode = Convert.ToString(row["ItemCode"]);
+                if (!DBNull.Value.Equals(row["Description"]))
+                    this.Description = Convert.ToString(row["Description"]);
+                if (!DBNull.Value.Equals(row["AcquiredCost"]))
+                    this.AcquiredCost = Convert.ToDecimal(row["AcquiredCost"]);
+                if (!DBNull.Value.Equals(row["MarkupPrice"]))
+                    this.MarkupRate = Convert.ToDecimal(row["MarkupPrice"]);
+                if (!DBNull.Value.Equals(row["SRP"]))
+                    this.SRP = Convert.ToDecimal(row["SRP"]);
+                if (!DBNull.Value.Equals(row["MinQty"]))
+                    this.MinQty = Convert.ToInt32(row["MinQty"]);
                 if (!DBNull.Value.Equals(row["TaxID"]))
                     this.TaxID = Convert.ToInt32(row["TaxID"]);
-                if (!DBNull.Value.Equals(row["DiscountRateID"]))
-                    this.DiscountRateID = Convert.ToInt32(row["DiscountRateID"]);
-                if (!DBNull.Value.Equals(row["StatusID"]))
-                    this.StatusID = Convert.ToInt32(row["StatusID"]);
+                if (!DBNull.Value.Equals(row["TaxAmountID"]))
+                    this.TaxAmountID = Convert.ToInt32(row["TaxAmountID"]);
+                if (!DBNull.Value.Equals(row["ProductTypeID"]))
+                    this.ProductTypeID = Convert.ToInt32(row["ProductTypeID"]);
+                if (!DBNull.Value.Equals(row["VariantTypeID"]))
+                    this.VariantTypeID = Convert.ToInt32(row["VariantTypeID"]);
+                if (!DBNull.Value.Equals(row["SpecifiedVariantID"]))
+                    this.VarianSpecifiedID = Convert.ToInt32(row["SpecifiedVariantID"]);
                 if (!DBNull.Value.Equals(row["FileName"]))
                     this.FileName = Convert.ToString(row["FileName"]);
                 if (!DBNull.Value.Equals(row["ImageURL"]))
                     this.ImageURL = Convert.ToString(row["ImageURL"]);
-                if (!DBNull.Value.Equals(row["MinQty"]))
-                    this.MinQty = Convert.ToInt32(row["MinQty"]);
-                if (!DBNull.Value.Equals(row["Qty"]))
-                    this.Qty = Convert.ToInt32(row["Qty"]);
-                if (!DBNull.Value.Equals(row["Description"]))
-                    this.Description = Convert.ToString(row["Description"]);
-                if (!DBNull.Value.Equals(row["Cost"]))
-                    this.Cost = Convert.ToDecimal(row["Cost"]);
-                if (!DBNull.Value.Equals(row["MarkupRate"]))
-                    this.MarkupRate = Convert.ToDecimal(row["MarkupRate"]);
-                if (!DBNull.Value.Equals(row["SRP"]))
-                    this.SRP = Convert.ToDecimal(row["SRP"]);
-
+                if (DBNull.Value.Equals(row["Discontinued"]))
+                    this.Discontinued = Convert.ToInt32(row["Discontinued"]);
                 if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
                     this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
                 if (!DBNull.Value.Equals(row["DateDiscontinued"]))
                     this.DateDiscontinued = Convert.ToDateTime(row["DateDiscontinued"]);
                 if (!DBNull.Value.Equals(row["CreatedBy"]))
                     this.CreatedBy = Convert.ToInt32(row["CreatedBy"]);
+                if (!DBNull.Value.Equals(row["DateCreated"]))
+                    this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
                 if (!DBNull.Value.Equals(row["ModifiedBy"]))
                     this.ModifiedBy = Convert.ToInt32(row["ModifiedBy"]);
                 if (!DBNull.Value.Equals(row["DateModified"]))
-                    this.DateModified = Convert.ToDateTime(row["DateModified"]);
+                    this.DateModified = Convert.ToDateTime(row["DateModified"]);    
             }
         }
         public bool Save()
@@ -183,7 +197,7 @@ namespace InventoryManagement_PRASMM.Models
             var dal = new ProductsDAL();
 
             string message = "";
-            int ret = dal.Save(this.ID,this.SubscriptionID, this.Name, this.CategoryID, this.SubCategoryID, this.BrandID, this.UnitID, this.SKU, this.MinQty, this.Qty, this.Description, this.TaxID, this.DiscountRateID, this.Cost, this.MarkupRate, this.SRP, this.StatusID, this.ImageURL, this.FileName, this.Discontinued, this.DiscontinuedBy, this.DateDiscontinued, this.CreatedBy, this.DateCreated, this.ModifiedBy, this.DateModified, out message);
+            int ret = dal.Save(this.ID,this.SubscriptionID,this.Name,this.SKU,this.CategoryID,this.SubCategoryID,this.BrandID,this.UnitID,this.BarCode,this.ItemCode,this.Description,this.AcquiredCost,this.MarkupPrice,this.SRP,this.MinQty,this.TaxID,this.TaxAmountID,this.ProductTypeID,this.VariantTypeID,this.VarianSpecifiedID,this.FileName,this.ImageURL,this.CreatedBy,this.DateCreated,this.ModifiedBy,this.DateModified);
 
             this.ID = ret;
             return (ret > 0);

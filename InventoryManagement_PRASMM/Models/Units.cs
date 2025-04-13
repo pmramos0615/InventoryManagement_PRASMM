@@ -28,6 +28,7 @@ namespace InventoryManagement_PRASMM.Models
         #endregion
         #region Properties
         public int ID { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public int Discontinued { get; set; }
         public int DiscontinuedBy { get; set; }
@@ -59,19 +60,43 @@ namespace InventoryManagement_PRASMM.Models
             }
             return collection;
         }
+        public static Units GetbySubscriptionID(int subscriptionid, int id)
+        {
+            var dal = new UnitsDAL();
+            var instance = new Units();
+            instance.Bind(dal.GetBySubscriptionID(subscriptionid, id));
+            return instance;
+        }
+        public static List<Units> GetAllBySubscriptionID(int subscriptionid)
+        {
+            var dal = new UnitsDAL();
+            var collection = new List<Units>();
+            foreach (DataRow row in dal.GetAllBySubscriptionID(subscriptionid).Rows)
+            {
+                var instance = new Units();
+                instance.Bind(row);
+                collection.Add(instance);
+            }
+            return collection;
+        }
         public void Bind(DataRow row)
         {
             if (row != null)
             {
                 this.ID = Convert.ToInt32(row["ID"]);
-                this.Name = Convert.ToString(row["Name"]);
-                this.Discontinued = Convert.ToInt32(row["Discontinued"]);
-                this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
 
+                if(!DBNull.Value.Equals(row["Name"]))
+                    this.Name = Convert.ToString(row["Name"]);
+                if (!DBNull.Value.Equals(row["Code"]))
+                    this.Code = Convert.ToString(row["Code"]);
+                if(!DBNull.Value.Equals(row["Discontinued"]))
+                    this.Discontinued = Convert.ToInt32(row["Discontinued"]);
                 if (!DBNull.Value.Equals(row["DiscontinuedBy"]))
                     this.DiscontinuedBy = Convert.ToInt32(row["DiscontinuedBy"]);
                 if (!DBNull.Value.Equals(row["DateDiscontinued"]))
                     this.DateDiscontinued = Convert.ToDateTime(row["DateDiscontinued"]);
+                if (!DBNull.Value.Equals(row["DateCreated"]))
+                    this.DateCreated = Convert.ToDateTime(row["DateCreated"]);
                 if (!DBNull.Value.Equals(row["CreatedBy"]))
                     this.CreatedBy = Convert.ToInt32(row["CreatedBy"]);
                 if (!DBNull.Value.Equals(row["ModifiedBy"]))

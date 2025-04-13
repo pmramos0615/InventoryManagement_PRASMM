@@ -12,6 +12,13 @@ namespace InventoryManagement_PRASMM.Data
             return base.GetDataTable();
         }
 
+        public DataTable GetByTaxTypeID(int taxtypeid, int subscriptionid) 
+        {
+            base.com.CommandText = "spTaxGetByTaxTypeID";
+            base.com.Parameters.AddWithValue("@taxtypeId",taxtypeid);
+            base.com.Parameters.AddWithValue("@subscriptionID", subscriptionid);
+            return base.GetDataTable();
+        }
         public DataRow GetByID(int id, int subscriptionid)
         {
             base.com.CommandText = "spTaxGetByID";
