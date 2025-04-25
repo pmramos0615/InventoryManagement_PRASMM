@@ -1,64 +1,130 @@
-﻿@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@model InventoryManagement_PRASMM.Models.Products.Search
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="content">
 
-    <div class="page-header">
-        <div class="page-title">
-            <h4>Product List</h4>
-            <h6>Manage your products</h6>
-        </div>
-        <div class="page-btn">
+	<div class="page-header">
+		<div class="page-title">
+			<h4>Product List</h4>
+			<h6>Manage your products</h6>
+		</div>
+		<div class="page-btn">
 			<a href="@Url.Action("Details")" class="btn btn-added">
-				<img src="~/img/icons/plus-circle.svg"/> &nbsp;
-                Add  New Product
-            </a>
-        </div>
-    </div>
+				<img src="~/img/icons/plus-circle.svg" /> &nbsp;
+				Add  New Product
+			</a>
+		</div>
+	</div>
 
-    @if (TempData["success"] != null)
-    {
-        <div class="alert alert-success rounded-pill alert-dismissible fade show">
-            @TempData["success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
-        </div>
-    }
+	@if (TempData["success"] != null)
+	{
+		<div class="alert alert-success rounded-pill alert-dismissible fade show">
+			@TempData["success"]
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
+		</div>
+	}
 
-    @if (TempData["error"] != null)
-    {
-        <div class="alert alert-danger rounded-pill alert-dismissible fade show">
-            @TempData["error"]
-            <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
-        </div>
-    }
-    <!-- /product list -->
-    <div class="card" >
-        <div class="card-body">
-            <!-- /Filter -->
-            <div class="table-responsive" >
-                <table id="datatableList" class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>SKU</th>
-                            <th>Category</th>
-                            <th>Brand</th>
-                            <th>Price</th>
-                            <th>Unit</th>
-                            <th>Qty</th>
-                            <th>Created By</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-    </div>
+	@if (TempData["error"] != null)
+	{
+		<div class="alert alert-danger rounded-pill alert-dismissible fade show">
+			@TempData["error"]
+			<button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
+		</div>
+	}
+	<!-- /product list -->
+	<div class="card">
+		<div class="card-header pb-0">
+			<div class="row">
+				<div class="col-12">
+					<div class="row">
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa fa-search fs-14 text-secondary"></i></span>
+									@Html.TextBoxFor(a => a.ProductName, new { @class = "form-control", @placeholder = "Product Name" })
+									@Html.HiddenFor(a => a.ProductName)
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								@Html.DropDownListFor(a => a.BrandID, new SelectList(ViewBag.Brand, "ID", "Name"), "Select Brands", new { @class = "form-control select", @style = "width:100%" })
+								@Html.HiddenFor(a => a.BrandID)
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								@Html.DropDownListFor(a => a.CategoryID, new SelectList(ViewBag.Category, "ID", "Name"), "Select Category", new { @class = "form-control select", @style = "width:100%" })
+								@Html.HiddenFor(a => a.CategoryID)
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								@Html.DropDownListFor(a => a.VariantID, new SelectList(ViewBag.ProductType, "ID", "Description"), "Select Product Type", new { @class = "form-control select", @style = "width:100%" })
+								@Html.HiddenFor(a => a.VariantID)
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								@Html.DropDownListFor(a => a.TaxID, new SelectList(ViewBag.TaxTypes, "Id", "Description"), "Select Tax Type", new { @class = "form-control select", @style = "width:100%" })
+								@Html.HiddenFor(a => a.TaxID)
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								@Html.TextBoxFor(a => a.DateFrom, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control col-6" })
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								@Html.TextBoxFor(a => a.DateTo, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control col-6" })
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-md-6 col-sm-12">
+							<div class="form-group">
+								<button type="button" class="form-control btn-primary btn-search">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+
+<div class="card-body w-100 pt-0 m-0">
+	<!-- /Filter -->
+	<div class="table-responsive pt-0 m-0">
+		<table id="datatableList" class="table mb-0 table-borderless table-responsive">
+					<thead class="table-secondary">
+				<tr>
+					<th class="">SKU</th>
+					<th>Product Name</th>
+					<th>Category</th>
+					<th>Brand</th>
+					<th>SRP</th>
+					<th>Product Type</th>
+					<th>Unit</th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+	</div>
 </div>
 
-@section scripts{
 
-    <script src="~/js/pages/products.js"></script>
+@section scripts {
+	<script src="~/js/feather.min.js"></script>
+	<script src="~/js/pages/productlist.js"></script>
 }
 

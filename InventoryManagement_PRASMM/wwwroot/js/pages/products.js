@@ -1,43 +1,4 @@
-﻿$(document).ready(function () {
-    $('#datatableList').DataTable({
-        "ajax": {
-            "url": "/Products/List",
-            "type": "Get",
-            "datatype": "json"
-        },
-        "columns": [
-            {
-                "data": "name",
-                "autoWidth": true,
-                "render": function (data, type, row) {
-                    const filename = row.fileName ? row.fileName : '1_33_images.jpg';
-                    return `<div style="display: flex; align-items: center;">
-                    <img src="/Uploads/Products/${filename}" alt="" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; object-fit:cover">
-                    <span>${row.name}</span>
-                </div>`;
-                   /* <img src="${row.imageURL}" alt="" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">*/
-                }
-            },
-            { "data": "sku", "autoWidth": true }, 
-            { "data": "category", "autoWidth": true }, 
-            { "data": "brand", "autoWidth": true }, 
-            { "data": "srp", "autoWidth": true },
-            { "data": "unit", "autoWidth": true },
-            { "data": "qty", "autoWidth": true },
-            { "data": "createdBy", "autoWidth": true },
-            {
-                "data": "id", "width": "100px", "render": function (data) {
-                    return '<a class="me-3 btnEdit" href="/Products/Details/' + data + '"><img src="img/icons/edit.svg" alt="img"></a>';
-                }
-            }
-        ],
-        "language": {
-            "emptyTable": "No data found, Please click on <b>Add New</b> button"
-        }
-    });
-    oTable = $('#datatableList').DataTable();
-});
-
+﻿
 //$("#btnDelete").click(function () {
 //    var id = $("#ID").val();
 //    Swal.fire({
@@ -125,13 +86,11 @@ $(document).on("click", ".btnSwal", function () {
 
             }
             else {
-                if ($('#variantselection').is(':visible') || $('#variantspecific').is(':visible'))
-                {
+                if ($('#variantselection').is(':visible') || $('#variantspecific').is(':visible')) {
                     if ($('#ddVariantType').val() === '0' || $('#ddVariantSpecific').val() === '0') {
                         alert("Please fill out all required fields.");
                     }
-                    else
-                    {
+                    else {
                         // Show loading animation and progress bar
                         Swal.fire({
                             html: `<div id="lottie-animation" style="width: 80%; height: 80%; margin: auto;"></div>
@@ -162,6 +121,35 @@ $(document).on("click", ".btnSwal", function () {
                         });
 
                     }
+                }
+                else {
+                    Swal.fire({
+                        html: `<div id="lottie-animation" style="width: 80%; height: 80%; margin: auto;"></div>
+                                    <div id="progress-bar-container" style="width: 100%; height: 10px; background-color: #f3f3f3; border-radius: 5px; margin-top: 20px;">
+                                        <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4caf50; border-radius: 5px;"></div>
+                                    </div>`,
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+
+                    $('#formProducts').submit();
+                    //after Submit the ActionResult will return a NoCotentent result then we redirect to the Index page
+                    var animation = lottie.loadAnimation({
+                        container: $('#lottie-animation')[0],
+                        renderer: 'svg',
+                        loop: false,
+                        autoplay: true,
+                        path: '/js/animation/Animation - 1743129363779.json'
+                    });
+
+                    $('#progress-bar').animate({ width: '100%' }, 3000);
+
+                    $(animation).on('complete', function () {
+                        window.location.href = '/Products/Index';
+                        $(window).on('load', function () {
+                            $('#global-loader').hide(); // 
+                        });
+                    });
                 }
             }
         }
@@ -287,7 +275,6 @@ $(document).on("change", "#TaxID", function () {
             data: { taxtypeId: taxtypeId },
             dataType: 'json',
             success: function (response) {
-                console.log(response.data)
                 if (response.data.length == 0) {
                     $('#ddTaxAmount').append('<option value="0">No Sub-Category Available</option>');
                 }
@@ -321,3 +308,126 @@ $(document).on("change", "#ddTaxAmount", function () {
     $('#TaxAmountID').val($('#ddTaxAmount').val())
 });
 
+$(document).on("click", ".imagePreview-close", function () {
+    $('#imagePreview').attr('src', '#');
+    $('#imagePreview').hide();
+});
+
+$(document).ready(function () {
+
+    var categoryId = $('#CategoryID').val()
+    var variantTypeID = $('#VariantTypeID').val()
+    var productTypeId = $('#ProductTypeID').val()
+    var taxtypeId = $('#TaxAmountID').val()
+
+    if (taxtypeId != 0) {
+        $('#ddTaxAmount').empty();
+        $.ajax({
+            type: 'GET',
+            url: '/Products/GetTaxByTaxTypeID',
+            data: { taxtypeId: taxtypeId },
+            dataType: 'json',
+            success: function (response) {
+                if (response.data.length == 0) {
+                    $('#ddTaxAmount').append('<option value="0">No Sub-Category Available</option>');
+                }
+                else {
+                    $('#ddTaxAmount').append('<option value="0">Select</option>');
+                }
+
+                for (var x = 0; x < response.data.length; x++) {
+                    $('#ddTaxAmount').append('<option value="' + response.data[x].id + '">' + response.data[x].amount + '</option>');
+                }
+                 
+                $('#ddTaxAmount').val($('#TaxAmountID').val()).change
+            },
+            error: function (error) {
+                console.log(error);
+            }
+
+        });
+    }
+
+    if (categoryId != 0)
+    {
+        $.ajax({
+            type: 'GET',
+            url: '/Products/GetProductSubCategoryByCategoryID',
+            data: { categoryId: categoryId },
+            dataType: 'json',
+            success: function (response) {
+                $('#ddSubCategory').empty();
+                if (response.data.length == 0) {
+                    $('#ddSubCategory').append('<option value="0">No Sub-Category Available</option>');
+                }
+                else {
+                    $('#ddSubCategory').append('<option value="0">Select</option>');
+                }
+
+                for (var x = 0; x < response.data.length; x++) {
+                    $('#ddSubCategory').append('<option value="' + response.data[x].id + '">' + response.data[x].name + '</option>');
+                }
+                /* console.log(response.data)*/
+
+                $('#ddSubCategory').val($('#SubCategoryID').val()).change()
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    if (productTypeId == 2) {
+        $('#variantselection').show();
+        $.ajax({
+            type: 'GET',
+            url: '/Products/GetVarianTypeBySubscriptionID',
+            /* data: { id: id },*/
+            dataType: 'json',
+            success: function (response) {
+                $('#ddVariantType').empty();
+                if (response.data.length == 0) {
+                    $('#ddVariantType').append('<option value="0">No Sub-Category Available</option>');
+                }
+                else {
+                    $('#ddVariantType').append('<option value="0">Select</option>');
+                }
+
+                for (var x = 0; x < response.data.length; x++) {
+                    $('#ddVariantType').append('<option value="' + response.data[x].id + '">' + response.data[x].description + '</option>');
+                }
+                $('#ddVariantType').val($('#VariantTypeID').val()).change()
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    if (variantTypeID != 0)
+    {
+        $('#variantspecific').show()
+        $.ajax({
+            type: 'GET',
+            url: '/Products/GetSpecifiedVariantbyID',
+            data: { variantTypeID: variantTypeID },
+            dataType: 'json',
+            success: function (response) {
+                $('#ddVariantSpecific').empty();
+                if (response.data.length == 0) {
+                    $('#ddVariantSpecific').append('<option value="0">No Sub-Category Available</option>');
+                }
+                else {
+                    $('#ddVariantSpecific').append('<option value="0">Select</option>');
+                }
+                for (var x = 0; x < response.data.length; x++) {
+                    $('#ddVariantSpecific').append('<option value="' + response.data[x].id + '">' + response.data[x].description + '</option>');
+                }
+                $('#ddVariantSpecific').val($('#VarianSpecifiedID').val()).change()
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+});
