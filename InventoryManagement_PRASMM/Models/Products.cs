@@ -1,11 +1,21 @@
 ﻿using InventoryManagement_PRASMM.Data;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace InventoryManagement_PRASMM.Models
 {
     public class Products
     {
-
+        public class Search
+        {
+            public string ProductName { get; set; }
+            public int CategoryID { get; set; }
+            public int BrandID { get; set; }
+            public int VariantID { get; set; }
+            public int TaxID { get; set; }
+            public DateTime DateFrom { get; set; }
+            public DateTime DateTo { get; set; }
+        }
         #region CONSTRUCTOR
         public Products()
         {
@@ -16,10 +26,15 @@ namespace InventoryManagement_PRASMM.Models
         {
             this.ID = 0;
             this.Name = "";
+            this.ProductName = "";
             this.CategoryID = 0;
+            this.Category = "";
             this.SubCategoryID = 0;
+            this.Subcategory = "";
             this.BrandID = 0;
+            this.Brand = "";
             this.UnitID = 0;
+            this.Unit = "";
             this.SKU = "";
             this.BarCode = "";
             this.MinQty = 0;
@@ -27,7 +42,6 @@ namespace InventoryManagement_PRASMM.Models
             this.Description = "";
             this.TaxID = 0;
             this.Cost = 0;
-            this.MarkupRate = 0;
             this.SRP = 0;
             this.StatusID = 0;
             this.ImageURL = "";
@@ -49,6 +63,7 @@ namespace InventoryManagement_PRASMM.Models
         public int ID { get; set; }
         public int SubscriptionID { get; set; }
         public string Name { get; set; }
+        public string ProductName { get; set; }
         public int CategoryID { get; set; }
         public string Category { get; set; }
         public int SubCategoryID { get; set; }
@@ -57,7 +72,8 @@ namespace InventoryManagement_PRASMM.Models
         public int StoreID { get; set; }
         public string Brand { get; set; }
         public int UnitID { get; set; }
-        public int ProductTypeID { get; set; }
+        public int ?ProductTypeID { get; set; }
+        public string ?ProductType { get; set; }
         public int VariantTypeID { get; set; }
         public int VarianSpecifiedID { get; set; }
         public string SKU { get; set; }
@@ -69,7 +85,6 @@ namespace InventoryManagement_PRASMM.Models
         public int TaxID { get; set; }
         public int TaxAmountID { get; set; }
         public decimal Cost { get; set; }
-        public decimal MarkupRate { get; set; }
         public decimal AcquiredCost { get; set; }
         public decimal MarkupPrice { get; set; }
         public decimal SRP { get; set; }
@@ -83,9 +98,7 @@ namespace InventoryManagement_PRASMM.Models
         public DateTime DateCreated { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime DateModified { get; set; }
-       
-       
-        public string Unit { get; private set; }
+        public string Unit { get; set; }
         public string FileName { get; internal set; }
         public IWebHostEnvironment ?_webHostEnvironment{ get; set; }         
         #endregion
@@ -134,6 +147,8 @@ namespace InventoryManagement_PRASMM.Models
                     this.Name = Convert.ToString(row["Name"]);
                 if (!DBNull.Value.Equals(row["SKU"]))
                     this.SKU = Convert.ToString(row["SKU"]);
+                if (!DBNull.Value.Equals(row["CategoryID"]))
+                    this.CategoryID = Convert.ToInt32(row["CategoryID"]);
                 if (!DBNull.Value.Equals(row["Category"]))
                     this.Category = Convert.ToString(row["Category"]);
                 if (!DBNull.Value.Equals(row["SubCategoryID"]))
@@ -157,7 +172,7 @@ namespace InventoryManagement_PRASMM.Models
                 if (!DBNull.Value.Equals(row["AcquiredCost"]))
                     this.AcquiredCost = Convert.ToDecimal(row["AcquiredCost"]);
                 if (!DBNull.Value.Equals(row["MarkupPrice"]))
-                    this.MarkupRate = Convert.ToDecimal(row["MarkupPrice"]);
+                    this.MarkupPrice = Convert.ToDecimal(row["MarkupPrice"]);
                 if (!DBNull.Value.Equals(row["SRP"]))
                     this.SRP = Convert.ToDecimal(row["SRP"]);
                 if (!DBNull.Value.Equals(row["MinQty"]))
@@ -201,6 +216,12 @@ namespace InventoryManagement_PRASMM.Models
 
             this.ID = ret;
             return (ret > 0);
+        }
+
+        internal static List<Products> ProductGetFilteredBySubscriptionID(int subscriptionid,int  brandid,int categoryid,int variantid,int taxtypeid,DateTime dateFrom,DateTime dateTo,int currentpage,int pagesize,out int item_count)
+        {
+            var dal = new ProductsDAL();
+            return dal.ProductGetFilteredBySubscriptionID(subscriptionid, brandid, categoryid,variantid,taxtypeid,dateFrom,dateTo,currentpage,pagesize,out item_count);
         }
         public static bool Delete(int id, int discontinuedby)
         {

@@ -1,9 +1,12 @@
-﻿using InventoryManagement_PRASMM.Models;
+﻿using Humanizer;
+using InventoryManagement_PRASMM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace InventoryManagement_PRASMM.Controllers
 {
@@ -26,15 +29,87 @@ namespace InventoryManagement_PRASMM.Controllers
         }
         public ActionResult Index()
         {
-            return View();
-        }
-        public ActionResult List()
-        {
-            
-            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+            Products.Search _details = new Products.Search();
 
-            var _list = Products.GetBySuscriptionId(subscriptionId);
-            return Json(new { data = _list });
+            int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+            if (subscriptionId == 0 || subscriptionId == null)
+            {
+                return RedirectToAction("Home", "Authentication");
+            }
+
+            ViewsViewbag(subscriptionId);
+
+            DateTime date = DateTime.Now;
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            _details.DateFrom = firstDayOfMonth;
+            _details.DateTo = lastDayOfMonth;
+            return View(_details);
+        }
+        //public ActionResult List()
+        //{
+
+        //    int subscriptionId = Convert.ToInt32(HttpContext.Session.GetInt32("SubscriptionID"));
+        //    if (subscriptionId == 0 || subscriptionId == null)
+        //    {
+        //        return RedirectToAction("Home", "Authentication");
+        //    }
+
+        //    var _list = Products.GetBySuscriptionId(subscriptionId);
+        //    return Json(new { data = _list });
+        //}
+        [HttpPost]
+        public IActionResult List()
+        {
+            int subscriptionId = HttpContext.Session.GetInt32("SubscriptionID") ?? 0;
+            if (subscriptionId == 0)
+            {
+                return RedirectToAction("Home", "Authentication");
+            }
+
+            var draw = Request.Form["draw"].FirstOrDefault();
+            var start = Request.Form["start"].FirstOrDefault();
+            var length = Request.Form["length"].FirstOrDefault();
+
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int currentpage = (Convert.ToInt32(start) / pageSize) + 1;
+
+            var productName = Request.Form["columns[0][search][value]"].FirstOrDefault();
+            var brandid = Request.Form["columns[1][search][value]"].FirstOrDefault();
+            var categoryid = Request.Form["columns[2][search][value]"].FirstOrDefault();
+            var variantid = Request.Form["columns[3][search][value]"].FirstOrDefault();
+            var taxtypeid = Request.Form["columns[4][search][value]"].FirstOrDefault();
+            var dateFrom = Request.Form["columns[5][search][value]"].FirstOrDefault();
+            var dateTo = Request.Form["columns[6][search][value]"].FirstOrDefault();
+
+            int BrandID = string.IsNullOrWhiteSpace(brandid) ? 0 : Convert.ToInt32(brandid);
+            int CategoryID = string.IsNullOrWhiteSpace(categoryid) ? 0 : Convert.ToInt32(categoryid);
+            int VariantID = string.IsNullOrWhiteSpace(variantid) ? 0 : Convert.ToInt32(variantid);
+            int TaxTypeID = string.IsNullOrWhiteSpace(taxtypeid) ? 0 : Convert.ToInt32(taxtypeid);
+
+            DateTime dtFrom, dtTo;
+            if (!DateTime.TryParse(dateFrom, out dtFrom))
+            {
+                dtFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            }
+            if (!DateTime.TryParse(dateTo, out dtTo))
+            {
+                dtTo = dtFrom.AddMonths(1).AddDays(-1);
+            }
+
+            int item_count;
+            var data = Products.ProductGetFilteredBySubscriptionID(
+                subscriptionId, BrandID, CategoryID, VariantID, TaxTypeID, dtFrom, dtTo, currentpage, pageSize, out item_count
+            );
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = item_count,
+                recordsFiltered = item_count,
+                data = data
+            });
         }
         // <------------------- I am still studying encryption for the parameters. Will be applied by finalization 
         public ActionResult Details(int ?id)
@@ -66,7 +141,6 @@ namespace InventoryManagement_PRASMM.Controllers
                     string fileNameOnly = parts[^1];
 
                     _details.FileName = fileNameOnly;   /* <------------------ This is to show the filename that the user entered only*/
-
                     return View(_details);
                 }
             }
@@ -124,7 +198,8 @@ namespace InventoryManagement_PRASMM.Controllers
                 string guidString = Guid.NewGuid().ToString("N");
                 if (_details.Attachment != null && _details.Attachment.Length > 0) 
                 {
-                    _transaction.ImageURL = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Uploads", "Products", subscriptionId + "_" + guidString + "_" + _details.Attachment.FileName);
+                                                                    //_hostingEnvironment.WebRootPath, "Uploads", "Products"   YOU MAY TURN IT BACK INTO THIS FORMAT IF IT IS RETURNING ABSOLUTE FILE LOCATION INSTEAD OF RELATIVE
+                    _transaction.ImageURL = System.IO.Path.Combine("\\","Uploads", "Products", subscriptionId + "_" + guidString + "_" + _details.Attachment.FileName);
                     _transaction.FileName = Path.Combine(subscriptionId + "_" + guidString + "_" + _details.Attachment.FileName);
 
 

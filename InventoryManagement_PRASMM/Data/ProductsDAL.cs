@@ -1,13 +1,11 @@
-﻿using InventoryManagement_PRASMM.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Data.SqlClient;
-using System.Data;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace InventoryManagement_PRASMM.Data
 {
     internal class ProductsDAL : BaseDAL
     {
-
+        SqlDataReader _reader;
         public DataTable GetAll()
         {
             base.com.CommandText = "spProducts";
@@ -30,8 +28,47 @@ namespace InventoryManagement_PRASMM.Data
             return base.GetFirstRow();
         }
 
+        public List<Models.Products> ProductGetFilteredBySubscriptionID(int subscriptionid, int brandid, int categoryid, int variantid, int taxtypeid,DateTime dateFrom,DateTime datetTo, int currentpage, int pagesize, out int item_count) {
+            SqlParameter param_out = new SqlParameter("@itemcount", SqlDbType.Int, 4);
+
+            base.com.CommandText = "spProductsGetFilteredBySubscriptionID";
+            base.com.Parameters.AddWithValue("@subscriptionid", subscriptionid);
+            base.com.Parameters.AddWithValue("@brandid", brandid);
+            base.com.Parameters.AddWithValue("@categoryid", categoryid);
+            base.com.Parameters.AddWithValue("@variantid", variantid);
+            base.com.Parameters.AddWithValue("@taxtypeid", taxtypeid);
+            base.com.Parameters.AddWithValue("@datefrom", dateFrom);
+            base.com.Parameters.AddWithValue("@dateto", datetTo);
+            base.com.Parameters.AddWithValue("@PageNumber", currentpage);
+            base.com.Parameters.AddWithValue("@PageSize", pagesize);
+            param_out.Direction = ParameterDirection.Output;
+            base.com.Parameters.Add(param_out);
+        
+            _reader = base.GetDataReader();
+            List<Models.Products> list = new List<Models.Products>();
+
+            while (_reader.Read())
+            {
+                Models.Products item = new Models.Products();
+                item.ID = _reader.GetInt32(0);
+                item.SKU = _reader.GetString(1);
+                item.ImageURL = _reader.GetString(2);
+                item.Name = _reader.GetString(3);
+                item.Category = _reader.GetString(4);
+                item.Brand = _reader.GetString(5);
+                item.SRP = _reader.GetDecimal(6);
+                item.ProductType = _reader.GetString(7);
+                item.Unit = _reader.GetString(8);
+                list.Add(item);
+            }
+            _reader.Close();
+            int.TryParse(param_out.Value.ToString(), out item_count);
+            return list;
+           
+        }
+
         public int Save(int id,int subscriptionId,string name,string sku,int categoryid,int subcategoryid,int brandid,int unitid,string barcode,string itemcode,string description,decimal acquiredcost,decimal markupprice
-            ,decimal srp,int minqty,int taxid,int taxamountid,int producttypeid,int varianttypeid,int specifiedvarianid,string filename,string imageurl,int createdby,DateTime datecreated,int modifiedby,DateTime datemodified)
+            ,decimal srp,int minqty,int taxid,int taxamountid,int ?producttypeid,int varianttypeid,int specifiedvarianid,string filename,string imageurl,int createdby,DateTime datecreated,int modifiedby,DateTime datemodified)
         {
             base.com.CommandText = "spProductsUpdate";
             base.com.Parameters.AddWithValue("@id", id);
